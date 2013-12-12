@@ -19,7 +19,7 @@ public class ResePlanerare extends JFrame {
 		avsluta = new JMenuItem("Avsluta");
 		avsluta.setMnemonic(KeyEvent.VK_X);// antar att programmet avslutas direkt om man trycker på den 
 		//öppna,spara, sparasom = överkurs för högre betyg
-		//avsluta.addActionListener(new AvslutaLyss());
+		avsluta.addActionListener(new AvslutaLyss());
 
 		arkiv.add(ny);
 		arkiv.add(avsluta);
@@ -68,7 +68,7 @@ public class ResePlanerare extends JFrame {
 
 		JButton andraFörb = new JButton("Ändra förbindelse");
 		north.add(andraFörb);
-		nyFörb.addActionListener(new AndraForbLyss());
+		andraFörb.addActionListener(new AndraForbLyss());
 		// knappar gui
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -78,14 +78,15 @@ public class ResePlanerare extends JFrame {
 	
 	//formulär NyForb
 	class NyForbindelse extends JPanel{
-		private JTextArea nyNamn, nyTid;
+		private JTextField nyNamn, nyTid;
 
 		public NyForbindelse(){
 			//label där de städer som användaren har valt visas "Förbindelse mellan"+ punktA + " och "+ punktB, dela punkter kopplas till radiobuttons som är kodade till en lyssnare.
 			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			nyNamn = new JTextArea(1, 12);
-			nyTid = new JTextArea(1, 6);
+			nyNamn = new JTextField(12);
+			nyTid = new JTextField(6);
+			nyTid.setEnabled(false);//textField setEnable
 			JPanel rad = new JPanel();
 			//rad.add(new JLabel("Du åker från" + from + "och" + to));
 			
@@ -110,13 +111,13 @@ public class ResePlanerare extends JFrame {
 
 	//Formulär VisaForb
 	class VisaForbindelse extends JPanel{
-		private JTextArea viNamn, viTid;
+		private JTextField viNamn, viTid;
 		private JPanel rad3, rad4, rad5;
 		
 		public VisaForbindelse(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			viNamn = new JTextArea(1, 12);
-			viTid = new JTextArea(1, 6);
+			viNamn = new JTextField(12);
+			viTid = new JTextField(6);
 			rad3 = new JPanel();
 			// visa de förbindelser som finns mellan from och to och vilken tid det tar att resa mellan dessa
 			
@@ -124,14 +125,14 @@ public class ResePlanerare extends JFrame {
 			rad4.add(new JLabel("Namn:"));
 			rad4.add(viNamn);
 			add(rad4);
-			viNamn.setEditable(false);
+			viNamn.setEnabled(false);
 			
 			
 			rad5 = new JPanel();
 			rad5.add(new JLabel("Tid"));
 			rad5.add(viTid);
 			add(rad5);
-			viTid.setEditable(false);
+			viTid.setEnabled(false);
 		}
 		public String getViNamn(){
 			return viNamn.getText();
@@ -144,20 +145,20 @@ public class ResePlanerare extends JFrame {
 	
 	//Form ÄndraFörbindelse
 	class AndraForbindelse extends JPanel {
-		private JTextArea AnNamn, AnTid;
+		private JTextField AnNamn, AnTid;
 		private JPanel rad6, rad7, rad8;
 		
 		public AndraForbindelse(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			AnNamn = new JTextArea(1, 12);
-			AnTid = new JTextArea(1, 6);
+			AnNamn = new JTextField(12);
+			AnTid = new JTextField(6);
 			rad6 = new JPanel();
 			//
 			rad7 = new JPanel();
 			rad7.add(new JLabel("Namn:"));
 			rad7.add(AnNamn);
 			add(rad7);
-			AnNamn.setEditable(false);
+			AnNamn.setEnabled(false);
 			
 			rad8 = new JPanel();
 			rad8.add(new JLabel("Tid"));
@@ -171,10 +172,44 @@ public class ResePlanerare extends JFrame {
 			return Integer.parseInt(AnTid.getText());
 		}
 	}
-	
-	//knappar
+	//Form AndraFörbindelse
+	// Ny plats form
+	class NyPlatsForm extends JPanel{
+		private JTextField NyPlats;
+		private JPanel rad9;
+		
+		public NyPlatsForm (){
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			NyPlats = new JTextField(12);
+			rad9 = new JPanel();
+			rad9.add(new JLabel("Platsens namn:"));
+			rad9.add(NyPlats);
+			add(rad9);
+		}
+		public String getNyPlats(){
+			return NyPlats.getText();
+		}
+	}
+	//Nyplats Form 
+	//Hitta väg form
+	class HittaVag extends JPanel{
+		private JTextArea hittaVag;
+		
+		public HittaVag(){
+			setLayout(new FlowLayout());
+			hittaVag = new JTextArea(1,10);
+			hittaVag.setEditable(false);
+			add(new JScrollPane(hittaVag));	
+		}
+	}
+	//hitta väg form
+	//Lyssnarnetoder
 	class HittaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			
+			HittaVag hiform = new HittaVag();
+			
+			JOptionPane.showMessageDialog(null, hiform, "Hitta väg", JOptionPane.INFORMATION_MESSAGE);
 
 		}
 	}
@@ -189,6 +224,11 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyPlatsLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			
+			NyPlatsForm nypform = new NyPlatsForm();
+			
+			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
+			// add. ListGraph och pltsen dyker upp på kartan när man trycker på ok.
 
 		}
 	}
@@ -215,6 +255,7 @@ public class ResePlanerare extends JFrame {
 	// menyfunktionalitet
 	class AvslutaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			System.exit(0);
 
 		}
 	}
