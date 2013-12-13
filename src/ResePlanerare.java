@@ -6,6 +6,7 @@ public class ResePlanerare extends JFrame {
 	JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
 	JMenu arkiv, op;
 	JMenuBar meny;
+	JFileChooser fc;
 	public ResePlanerare(){
 		super("ResePlanerare");
 		setLayout(new BorderLayout());
@@ -17,7 +18,7 @@ public class ResePlanerare extends JFrame {
 		ny.addActionListener(new NyKartaLyss());
 
 		avsluta = new JMenuItem("Avsluta");
-		avsluta.setMnemonic(KeyEvent.VK_X);// antar att programmet avslutas direkt om man trycker på den 
+		//avsluta.setMnemonic(KeyEvent.VK_X);// antar att programmet avslutas direkt om man trycker på den 
 		//öppna,spara, sparasom = överkurs för högre betyg
 		avsluta.addActionListener(new AvslutaLyss());
 
@@ -47,7 +48,6 @@ public class ResePlanerare extends JFrame {
 		//meny	
 		//Knappar gui
 		JPanel north = new JPanel();
-		//north.setLayout(FlowLayout());
 		add(north, BorderLayout.NORTH);
 
 		JButton hitta = new JButton("Hitta väg");
@@ -70,9 +70,19 @@ public class ResePlanerare extends JFrame {
 		north.add(andraFörb);
 		andraFörb.addActionListener(new AndraForbLyss());
 		// knappar gui
-
+		
+		// rita upp bilden använd detta i en inre klass istället efter lunch
+		JPanel karta = new JPanel();
+		karta.setLayout(null);
+		add(karta,BorderLayout.CENTER);
+		//JLabel lol = new JLabel();
+		//karta.add(lol);
+		//karta.drawImage(fc.getSelectedFile().getName());
+		
+		//rita upp bilden
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(600,500);
+		pack();
 		setVisible(true);
 	}
 	
@@ -203,7 +213,22 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//hitta väg form
-	//Lyssnarnetoder
+	
+	//bilder
+	class Bilder extends JComponent{
+		private Image bild;
+		
+		public Bilder(){
+			Toolkit tk = Toolkit.getDefaultToolkit();
+			bild = tk.getImage("My World.png");
+		}
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(bild,  0,  0,  getWidth(),getHeight(), this);
+		}
+		
+	}
+	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 			
@@ -261,7 +286,28 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
+			//String str = System.getProperty("user.dir");
+			final JFileChooser fc = new JFileChooser(".");
+			
+			
+			
+			int returnVal = fc.showOpenDialog((JComponent)ave.getSource());
+			if( returnVal == JFileChooser.APPROVE_OPTION) {
+				
+				fc.getSelectedFile().getName();
+				
+				//anrpoa metoden i bildklassen(
+				fc.getSelectedFile().getName();
+				ImageIcon picture = new ImageIcon();
+				
+				
+			
+				
+				
+			}
+			//protected void paintComponent(Graphics g){
+				
+			//}
 		}
 	}
 	// menyfunktionalitet
@@ -273,9 +319,10 @@ public class ResePlanerare extends JFrame {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {new ResePlanerare(); {
+	public static void main(String[] args) {
+		new ResePlanerare(); 
 
-	}
+	
 
 	}
 
