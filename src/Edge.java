@@ -1,27 +1,38 @@
 
 public class Edge {
 	private Node destination;
-	private String namn;
-	private int vikt;
+	private String name;
+	private int weight;
 	
-	public Edge (Node destination, String namn, int vikt){
-		if (vikt < 0)
+	public Edge (Node destination, String name, int weight){
+		if (weight < 0)
 			throw new IllegalArgumentException("negativ vikt");
 		this.destination = destination;
-		this.namn = namn;
-		this.vikt = vikt;
+		this.name = name;
+		this.weight = weight;
 		
 	}
 	public Node getDestination(){
 		return destination;
 	}
-	public String getNamn(){
-		return namn;
+	public String getName(){
+		return name;
 	}
-	public int getVikt(){
-		return vikt;
+	public int getWeight(){
+		return weight;
+	}
+	public boolean setWeight(int weight){
+		boolean hasWeight = false;
+		if(this.weight == 0){
+			this.weight = weight;
+			hasWeight = true;
+		}
+		return hasWeight;
+	}
+	public int setNormalWeight(){
+		return this.weight = weight;
 	}
 	public String toString(){
-		return " till " + destination + " "+ " med " + namn + ": " + vikt;
+		return " till " + destination + " "+ " med " + name + ": " + weight;
 	}
 }

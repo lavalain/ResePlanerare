@@ -22,6 +22,10 @@ public class TestGraph {
 		g.connect(n5, n2, "Flyg", 4);
 		
 		System.out.println(g);
+		if(g.pathExists(n1, n5))
+			System.out.println("väg finnes");
+		else
+			System.out.println("väg finns inte");
 	}
 
 }
