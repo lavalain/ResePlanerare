@@ -1,7 +1,7 @@
 import java.util.*;
 public class ListGraph {
 
-	private Map <Node, List<Edge>> nodes = new HashMap<Node, List<Edge>>();
+	private Map <Node, List<Edge>> nodes = new HashMap<Node, List<Edge>>();//edges byt namn på listan eftersom den representerar edges
 
 	public void add(Node ny){
 		if(nodes.containsKey(ny))
@@ -44,24 +44,32 @@ public class ListGraph {
 	public Set<Node> getNodes(){
 		return new HashSet<Node>(nodes.keySet());
 	}
-	public Edge getEdgeBetween (Node from, Node to, String name) {
-			if(!nodes.containsKey(from) || !nodes.containsKey(to)){
-				throw new NoSuchElementException("Det finns ingen Nod");
-			}
+
+	public Edge getEdgeBetween (Node from, Node to) {
+		if(!nodes.containsKey(from) || !nodes.containsKey(to)){
+			throw new NoSuchElementException("Det finns ingen Nod");
+		}
 		for(Edge e :nodes.get(from)){
-			if(e.getDestination().equals(to) && e.getName().equals(name))
+			if(e.getDestination().equals(to))
 				return  e;
 		}
 		return null;
 	}
-	public Set<Edge> getEdgesFrom(Node from){
-		return new HashSet<Edge>(nodes.entrySet());
+
+	public Set<Edge> getEdgesFrom (Node from){
+		if(!nodes.containsKey(from)){
+			throw new NoSuchElementException("det finns inte någon sådan Nod");
+		}
+		return new HashSet<Edge>(nodes.get(from));			
 	}
-	//public int setConnectionWeight(Node n1, Node n2, int weight){
-		//if (!nodes.containsKey(n1) || !nodes.containsKey(n2)|| pathExists(Node n1, Node n2)){
-			//throw new NoSuchElementException("Det finns ingen Nod, eller båge");
-			// hur letar man fram en båge? och bestämmer vikten på bågen, man tar två noder och sätter ut bågen. sen tar man bågen och ändrar den med setWeight metoden.
-		//}
-		//return e;
-	//}
+
+
+
+	public int setConnectionWeight(Node from, Node to, int weight){
+		if(!pathExists(from, to) ||!nodes.containsKey(from) || !nodes.containsKey(to)){
+			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
+		}
+		return 0;
+	}
 }
+

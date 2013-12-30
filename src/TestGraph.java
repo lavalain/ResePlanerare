@@ -16,12 +16,12 @@ public class TestGraph {
 		g.add(n4);
 		g.add(n5);
 		
-		g.connect(n1, n2, "tåg", 2);
-		g.connect(n1, n3, "båt", 10);
+		g.connect(n1, n2, "Tåg", 2);
+		g.connect(n1, n3, "Båt", 10);
 		g.connect(n2, n3, "Tåg", 8);
 		g.connect(n5, n2, "Flyg", 4);
 		
-		System.out.println(g.getEdgeBetween(n1, n2, "tåg"));
+		System.out.println(g.getEdgeBetween(n2, n3));
 	}
 
 }
