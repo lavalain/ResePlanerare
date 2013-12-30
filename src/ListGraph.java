@@ -63,13 +63,15 @@ public class ListGraph {
 		return new HashSet<Edge>(nodes.get(from));			
 	}
 
-
-
 	public int setConnectionWeight(Node from, Node to, int weight){
 		if(!pathExists(from, to) ||!nodes.containsKey(from) || !nodes.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
 		}
 		return 0;
+			
+				
+			
+		
 	}
 }
 

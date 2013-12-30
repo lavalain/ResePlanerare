@@ -253,6 +253,8 @@ public class ResePlanerare extends JFrame {
 			NyPlatsForm nypform = new NyPlatsForm();
 			
 			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
+			
+			//nynamn
 			// add. ListGraph och pltsen dyker upp på kartan när man trycker på ok.
 
 		}

@@ -21,16 +21,8 @@ public class Edge {
 	public int getWeight(){
 		return weight;
 	}
-	public boolean setWeight(int weight){
-		boolean hasWeight = false;
-		if(this.weight == 0){
-			this.weight = weight;
-			hasWeight = true;
-		}
-		return hasWeight;
-	}
-	public int setNormalWeight(){
-		return this.weight = weight;
+	public void setWeight(int weight){
+		this.weight = weight;
 	}
 	public String toString(){
 		return " till " + destination + " "+ " med " + name + ": " + weight;
