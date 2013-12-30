@@ -45,11 +45,23 @@ public class ListGraph {
 		return new HashSet<Node>(nodes.keySet());
 	}
 	public Edge getEdgeBetween (Node from, Node to, String name) {
-
+			if(!nodes.containsKey(from) || !nodes.containsKey(to)){
+				throw new NoSuchElementException("Det finns ingen Nod");
+			}
 		for(Edge e :nodes.get(from)){
 			if(e.getDestination().equals(to) && e.getName().equals(name))
 				return  e;
 		}
 		return null;
 	}
+	public Set<Edge> getEdgesFrom(Node from){
+		return new HashSet<Edge>(nodes.entrySet());
+	}
+	//public int setConnectionWeight(Node n1, Node n2, int weight){
+		//if (!nodes.containsKey(n1) || !nodes.containsKey(n2)|| pathExists(Node n1, Node n2)){
+			//throw new NoSuchElementException("Det finns ingen Nod, eller båge");
+			// hur letar man fram en båge? och bestämmer vikten på bågen, man tar två noder och sätter ut bågen. sen tar man bågen och ändrar den med setWeight metoden.
+		//}
+		//return e;
+	//}
 }

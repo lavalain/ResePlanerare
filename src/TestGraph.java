@@ -21,11 +21,7 @@ public class TestGraph {
 		g.connect(n2, n3, "Tåg", 8);
 		g.connect(n5, n2, "Flyg", 4);
 		
-		System.out.println(g);
-		if(g.pathExists(n1, n5))
-			System.out.println("väg finnes");
-		else
-			System.out.println("väg finns inte");
+		System.out.println(g.getEdgeBetween(n1, n2, "tåg"));
 	}
 
 }
