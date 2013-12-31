@@ -67,18 +67,16 @@ public class ListGraph {
 	}
 	public List<Edge> getPath(Node from, Node to){
 		Set<Node> visited = new HashSet<Node>();
-		Map<Node,Node> via= new HashMap<Node,Node>();
-		depthFirstSearch2(from, null, visited,via);
-		
+		Map<Node, Node> via= new HashMap<Node, Node>();
+		depthFirstSearch2(from, null, visited, via);
 		LinkedList<Edge> path = new LinkedList<Edge>();
 		Node whereTo = to;
-		Node whereFrom = via.get(whereTo);
-		while( whereTo != from)
-			whereFrom = via.get(whereTo);
+		while(whereTo != from){
+			Node whereFrom = via.get(whereTo);
 			Edge e = getEdgeBetween(whereFrom, whereTo);
 			path.addFirst(e);
 			whereTo = whereFrom;
-		
+		}
 		return path;	
 	}
 	public Edge setConnectionWeight(Node from, Node to, int weight){
