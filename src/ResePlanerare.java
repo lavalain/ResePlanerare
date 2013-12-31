@@ -274,6 +274,7 @@ public class ResePlanerare extends JFrame {
 			AndraForbindelse anform = new AndraForbindelse();
 			
 			int anRes = JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+			//setWeight(); AnTid heter JTextfield som nya tiden anges i
 
 		}
 	}

@@ -1,14 +1,14 @@
 
 public class Node {
-	private String namn;
+	private String name;
 	
-	public Node(String namn){
-		this.namn = namn;
+	public Node(String name){
+		this.name = name;
 	}
-	public String getNamn(){
-		return namn;
+	public String getName(){
+		return name;
 	}
 	public String toString(){
-		return namn;
+		return name;
 	}
 }

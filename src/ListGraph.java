@@ -1,29 +1,29 @@
 import java.util.*;
 public class ListGraph {
 
-	private Map <Node, List<Edge>> nodes = new HashMap<Node, List<Edge>>();//edges byt namn på listan eftersom den representerar edges
+	private Map <Node, List<Edge>> network = new HashMap<Node, List<Edge>>();
 
 	public void add(Node ny){
-		if(nodes.containsKey(ny))
+		if(network.containsKey(ny))
 			throw new IllegalArgumentException("Stad finns redan vid add");
 
-		nodes.put(ny, new ArrayList<Edge>());
+		network.put(ny, new ArrayList<Edge>());
 	}
 	public void connect(Node from, Node to, String name, int weight){
-		if (!nodes.containsKey(from)|| !nodes.containsKey(to))
+		if (!network.containsKey(from)|| !network.containsKey(to))
 			throw new NoSuchElementException("det finns ingen stad");
 
 		Edge e1 = new Edge(to, name, weight);
-		List<Edge> fromList = nodes.get(from);
+		List<Edge> fromList = network.get(from);
 		fromList.add(e1);
 
 		Edge e2 = new Edge(from, name, weight);
-		List<Edge> toList = nodes.get(to);
+		List<Edge> toList = network.get(to);
 		toList.add(e2);	
 	}
 	public String toString(){
 		String str = " ";
-		for (Map.Entry<Node, List<Edge>> me: nodes.entrySet()) 
+		for (Map.Entry<Node, List<Edge>> me: network.entrySet()) 
 			str += me.getKey() +" " + me.getValue() + "\n";
 		return str;
 	}
@@ -34,44 +34,68 @@ public class ListGraph {
 	}
 	private void depthFirstSearch(Node n, Set<Node> visited){
 		visited.add(n);
-		List<Edge> edges = nodes.get(n);
-		for (Edge e :edges){
-			Node to = e.getDestination();
-			if(!visited.contains(to))
-				depthFirstSearch(to, visited);
-		}
+		for (Edge e : network.get(n))
+			if(!visited.contains(e.getDestination()))
+				depthFirstSearch(e.getDestination(), visited);
 	}
 	public Set<Node> getNodes(){
-		return new HashSet<Node>(nodes.keySet());
+		return new HashSet<Node>(network.keySet());
 	}
-
 	public Edge getEdgeBetween (Node from, Node to) {
-		if(!nodes.containsKey(from) || !nodes.containsKey(to)){
+		if(!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Det finns ingen Nod");
 		}
-		for(Edge e :nodes.get(from)){
+		for(Edge e :network.get(from)){
 			if(e.getDestination().equals(to))
 				return  e;
-		}
+		}//behövs???
 		return null;
 	}
 
 	public Set<Edge> getEdgesFrom (Node from){
-		if(!nodes.containsKey(from)){
+		if(!network.containsKey(from)){
 			throw new NoSuchElementException("det finns inte någon sådan Nod");
 		}
-		return new HashSet<Edge>(nodes.get(from));			
+		return new HashSet<Edge>(network.get(from));			
+	}
+	public List<Edge> getPath(Node from, Node to){
+		Set<Node> visited = new HashSet<Node>();
+		Map<Node,Node> via= new HashMap<Node,Node>();
+		depthFirstSearch2(from, null, visited,via);
+		
+		LinkedList<Edge> path = new LinkedList<Edge>();
+		Node whereTo = to;
+		while( whereTo != from)
+			Node whereFrom = via.get(whereTo);
+			Edge e = getEdgeBetween(whereFrom, whereTo);
+			path.addFirst(e);
+			whereTo = whereFrom;
+		
+		return path;	
+	}
+	public void depthFirstSearch2(Node where, Node fromWhere, Set<Node>visited, Map<Node,Node>via){
+		visited.add(where);
+		via.put(where, fromWhere);
+		for(Edge e : network.get(where))
+			if(!visited.contains(e.getDestination()))
+				depthFirstSearch2(e.getDestination(),where, visited, via);
 	}
 
-	public int setConnectionWeight(Node from, Node to, int weight){
-		if(!pathExists(from, to) ||!nodes.containsKey(from) || !nodes.containsKey(to)){
+	public Edge setConnectionWeight(Node from, Node to, int weight){
+		if(!pathExists(from, to) ||!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
 		}
-		return 0;
-			
-				
-			
-		
+		for(Edge e : network.get(from)){
+			if(e.getDestination().equals(to) && e.getWeight()== (weight))
+				return e;
+		}
+		return null;
+
+		//denna funkar inte men nu ger ja upp!!!!
+
+
+
+
 	}
 }
 

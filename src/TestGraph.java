@@ -21,7 +21,7 @@ public class TestGraph {
 		g.connect(n2, n3, "Tåg", 8);
 		g.connect(n5, n2, "Flyg", 4);
 		
-		System.out.println(g.getEdgeBetween(n2, n3));
+		System.out.println(n2 + "-"+ n3 + ":" + g.pathExists(n2, n3));
 	}
 
 }
