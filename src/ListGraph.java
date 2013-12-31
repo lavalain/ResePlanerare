@@ -58,21 +58,6 @@ public class ListGraph {
 		}
 		return new HashSet<Edge>(network.get(from));			
 	}
-	public List<Edge> getPath(Node from, Node to){
-		Set<Node> visited = new HashSet<Node>();
-		Map<Node,Node> via= new HashMap<Node,Node>();
-		depthFirstSearch2(from, null, visited,via);
-		
-		LinkedList<Edge> path = new LinkedList<Edge>();
-		Node whereTo = to;
-		while( whereTo != from)
-			Node whereFrom = via.get(whereTo);
-			Edge e = getEdgeBetween(whereFrom, whereTo);
-			path.addFirst(e);
-			whereTo = whereFrom;
-		
-		return path;	
-	}
 	public void depthFirstSearch2(Node where, Node fromWhere, Set<Node>visited, Map<Node,Node>via){
 		visited.add(where);
 		via.put(where, fromWhere);
@@ -80,7 +65,22 @@ public class ListGraph {
 			if(!visited.contains(e.getDestination()))
 				depthFirstSearch2(e.getDestination(),where, visited, via);
 	}
-
+	public List<Edge> getPath(Node from, Node to){
+		Set<Node> visited = new HashSet<Node>();
+		Map<Node,Node> via= new HashMap<Node,Node>();
+		depthFirstSearch2(from, null, visited,via);
+		
+		LinkedList<Edge> path = new LinkedList<Edge>();
+		Node whereTo = to;
+		Node whereFrom = via.get(whereTo);
+		while( whereTo != from)
+			whereFrom = via.get(whereTo);
+			Edge e = getEdgeBetween(whereFrom, whereTo);
+			path.addFirst(e);
+			whereTo = whereFrom;
+		
+		return path;	
+	}
 	public Edge setConnectionWeight(Node from, Node to, int weight){
 		if(!pathExists(from, to) ||!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
