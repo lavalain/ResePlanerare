@@ -83,6 +83,8 @@ public class ListGraph {
 		if(!pathExists(from, to) ||!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
 		}
+		//Edge e = getEdgeBetween(from, to);
+		
 		for(Edge e : network.get(from)){
 			if(e.getDestination().equals(to) && e.getWeight()== (weight))
 				return e;

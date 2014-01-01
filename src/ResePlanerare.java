@@ -1,12 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class ResePlanerare extends JFrame {
 	JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
 	JMenu arkiv, op;
 	JMenuBar meny;
 	JFileChooser fc;
+	ImagePanel picture = null;
+
 	public ResePlanerare(){
 		super("ResePlanerare");
 		setLayout(new BorderLayout());
@@ -70,7 +73,7 @@ public class ResePlanerare extends JFrame {
 		north.add(andraFörb);
 		andraFörb.addActionListener(new AndraForbLyss());
 		// knappar gui
-		
+
 		// rita upp bilden använd detta i en inre klass istället efter lunch
 		JPanel karta = new JPanel();
 		karta.setLayout(null);
@@ -78,28 +81,28 @@ public class ResePlanerare extends JFrame {
 		//JLabel lol = new JLabel();
 		//karta.add(lol);
 		//karta.drawImage(fc.getSelectedFile().getName());
-		
+
 		//rita upp bilden
-		
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
 	}
-	
+
 	//formulär NyForb
 	class NyForbindelse extends JPanel{
 		private JTextField nyNamn, nyTid;
 
 		public NyForbindelse(){
 			//label där de städer som användaren har valt visas "Förbindelse mellan"+ punktA + " och "+ punktB, dela punkter kopplas till radiobuttons som är kodade till en lyssnare.
-			
+
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			nyNamn = new JTextField(12);
 			nyTid = new JTextField(6);
 			nyTid.setEnabled(false);//textField setEnable
 			JPanel rad = new JPanel();
 			//rad.add(new JLabel("Du åker från" + from + "och" + to));
-			
+
 			JPanel rad1 = new JPanel();
 			rad1.add(new JLabel("Namn:"));
 			rad1.add(nyNamn);
@@ -123,21 +126,21 @@ public class ResePlanerare extends JFrame {
 	class VisaForbindelse extends JPanel{
 		private JTextField viNamn, viTid;
 		private JPanel rad3, rad4, rad5;
-		
+
 		public VisaForbindelse(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			viNamn = new JTextField(12);
 			viTid = new JTextField(6);
 			rad3 = new JPanel();
 			// visa de förbindelser som finns mellan from och to och vilken tid det tar att resa mellan dessa
-			
+
 			rad4 = new JPanel();
 			rad4.add(new JLabel("Namn:"));
 			rad4.add(viNamn);
 			add(rad4);
 			viNamn.setEnabled(false);
-			
-			
+
+
 			rad5 = new JPanel();
 			rad5.add(new JLabel("Tid"));
 			rad5.add(viTid);
@@ -152,12 +155,12 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//Formulär VisaForb
-	
+
 	//Form ÄndraFörbindelse
 	class AndraForbindelse extends JPanel {
 		private JTextField AnNamn, AnTid;
 		private JPanel rad6, rad7, rad8;
-		
+
 		public AndraForbindelse(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			AnNamn = new JTextField(12);
@@ -169,7 +172,7 @@ public class ResePlanerare extends JFrame {
 			rad7.add(AnNamn);
 			add(rad7);
 			AnNamn.setEnabled(false);
-			
+
 			rad8 = new JPanel();
 			rad8.add(new JLabel("Tid"));
 			rad8.add(AnTid);
@@ -187,7 +190,7 @@ public class ResePlanerare extends JFrame {
 	class NyPlatsForm extends JPanel{
 		private JTextField NyPlats;
 		private JPanel rad9;
-		
+
 		public NyPlatsForm (){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			NyPlats = new JTextField(12);
@@ -204,7 +207,7 @@ public class ResePlanerare extends JFrame {
 	//Hitta väg form
 	class HittaVag extends JPanel{
 		private JTextArea hittaVag;
-		
+
 		public HittaVag(){
 			setLayout(new FlowLayout());
 			hittaVag = new JTextArea(1,10);
@@ -213,11 +216,11 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//hitta väg form
-	
+
 	//bilder
 	class Bilder extends JComponent{
 		private Image bild;
-		
+
 		public Bilder(){
 			Toolkit tk = Toolkit.getDefaultToolkit();
 			bild = tk.getImage("My World.png");
@@ -226,14 +229,14 @@ public class ResePlanerare extends JFrame {
 			super.paintComponent(g);
 			g.drawImage(bild,  0,  0,  getWidth(),getHeight(), this);
 		}
-		
+
 	}
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			HittaVag hiform = new HittaVag();
-			
+
 			JOptionPane.showMessageDialog(null, hiform, "Hitta väg", JOptionPane.INFORMATION_MESSAGE);
 
 		}
@@ -249,11 +252,11 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyPlatsLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			NyPlatsForm nypform = new NyPlatsForm();
-			
+
 			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
-			
+
 			//nynamn
 			// add. ListGraph och pltsen dyker upp på kartan när man trycker på ok.
 
@@ -270,9 +273,9 @@ public class ResePlanerare extends JFrame {
 	}
 	class AndraForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			AndraForbindelse anform = new AndraForbindelse();
-			
+
 			int anRes = JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
 			//setWeight(); AnTid heter JTextfield som nya tiden anges i
 
@@ -289,30 +292,33 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			//String str = System.getProperty("user.dir");
-			final JFileChooser fc = new JFileChooser(".");
-			
-			
-			
-			int returnVal = fc.showOpenDialog((JComponent)ave.getSource());
-			if( returnVal == JFileChooser.APPROVE_OPTION) {
-				
-				fc.getSelectedFile().getName();
-				
-				//anrpoa metoden i bildklassen(
-				fc.getSelectedFile().getName();
-				ImageIcon picture = new ImageIcon();
-				
-				
-			
-				
-				
-			}
-			//protected void paintComponent(Graphics g){
-				
-			//}
+
+			int returnVal = fc.showOpenDialog(ResePlanerare.this);
+			if (returnVal != JFileChooser.APPROVE_OPTION)
+				return;
+
+			File f = fc.getSelectedFile();
+			String filename = f.getAbsolutePath();
+			if (picture != null)
+				remove(picture);
+			picture = new ImagePanel(filename);
+			add(picture, BorderLayout.CENTER);
+			validate();
+			repaint();
+			pack();
+
+
+
+
+
+
+
 		}
+
+
+
 	}
+
 	// menyfunktionalitet
 
 
@@ -325,7 +331,7 @@ public class ResePlanerare extends JFrame {
 	public static void main(String[] args) {
 		new ResePlanerare(); 
 
-	
+
 
 	}
 
