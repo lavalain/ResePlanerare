@@ -1,3 +1,5 @@
+package Graph;
+
 import java.util.*;
 public class ListGraph {
 
@@ -8,6 +10,7 @@ public class ListGraph {
 			throw new IllegalArgumentException("Stad finns redan vid add");
 
 		network.put(ny, new ArrayList<Edge>());
+		System.out.println(" addad nod");
 	}
 	public void connect(Node from, Node to, String name, int weight){
 		if (!network.containsKey(from)|| !network.containsKey(to))
@@ -48,7 +51,7 @@ public class ListGraph {
 		for(Edge e :network.get(from)){
 			if(e.getDestination().equals(to))
 				return  e;
-		}//behövs???
+		}
 		return null;
 	}
 
@@ -79,23 +82,14 @@ public class ListGraph {
 		}
 		return path;	
 	}
-	public Edge setConnectionWeight(Node from, Node to, int weight){
+	public void setConnectionWeight(Node from, Node to, int weight){
 		if(!pathExists(from, to) ||!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
 		}
-		//Edge e = getEdgeBetween(from, to);
-		
-		for(Edge e : network.get(from)){
-			if(e.getDestination().equals(to) && e.getWeight()== (weight))
-				return e;
-		}
-		return null;
-
-		//denna funkar inte men nu ger ja upp!!!!
-
-
-
-
+		Edge e = getEdgeBetween(from, to);
+		e.setWeight(weight);
+		e = getEdgeBetween(to, from);
+		e.setWeight(weight);
 	}
 }
 

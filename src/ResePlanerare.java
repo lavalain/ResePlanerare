@@ -1,14 +1,28 @@
+import Graph.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.awt.image.*;
+import java.io.*;
+import java.awt.event.MouseAdapter;
+
 
 public class ResePlanerare extends JFrame {
-	JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
-	JMenu arkiv, op;
-	JMenuBar meny;
-	JFileChooser fc;
-	ImagePanel picture = null;
+	
+	private JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
+	private JMenu arkiv, op;
+	private JMenuBar meny;
+	private JFileChooser fc;
+	private ImagePanel picture = null;
+	private BufferedImage img;
+	private MouseList m;
+	private NodeGraphics sel1, sel2;
+	
+	
+	private ListGraph lg = new ListGraph();
+	
 
 	public ResePlanerare(){
 		super("ResePlanerare");
@@ -16,29 +30,25 @@ public class ResePlanerare extends JFrame {
 		//meny 
 		meny = new JMenuBar();
 		arkiv = new JMenu("Arkiv");
-
+		
 		ny = new JMenuItem("Ny");
+		add(ny, BorderLayout.NORTH);
 		ny.addActionListener(new NyKartaLyss());
-
+		
 		avsluta = new JMenuItem("Avsluta");
-		//avsluta.setMnemonic(KeyEvent.VK_X);// antar att programmet avslutas direkt om man trycker på den 
-		//öppna,spara, sparasom = överkurs för högre betyg
 		avsluta.addActionListener(new AvslutaLyss());
-
 		arkiv.add(ny);
 		arkiv.add(avsluta);
+		
 		meny.add(arkiv);
 
 		op = new JMenu("Operationer");
 		menyHitta = new JMenuItem("Hitta väg");
 		menyHitta.addActionListener(new HittaLyss());
-
 		menyVisa = new JMenuItem("Visa Förbindelse");
 		menyVisa.addActionListener(new VisaForLyss());
-
 		menyNyPlats = new JMenuItem("Ny plats");
 		menyNyPlats.addActionListener(new NyPlatsLyss());
-
 		menyNyForb = new JMenuItem("Ny förbindelse");
 		menyNyForb.addActionListener(new NyForbLyss());
 
@@ -46,10 +56,12 @@ public class ResePlanerare extends JFrame {
 		op.add(menyVisa);
 		op.add(menyNyPlats);
 		op.add(menyNyForb);
+		
 		meny.add(op);
 		setJMenuBar(meny);
 		//meny	
-		//Knappar gui
+		
+		//Knappar 
 		JPanel north = new JPanel();
 		add(north, BorderLayout.NORTH);
 
@@ -72,40 +84,31 @@ public class ResePlanerare extends JFrame {
 		JButton andraFörb = new JButton("Ändra förbindelse");
 		north.add(andraFörb);
 		andraFörb.addActionListener(new AndraForbLyss());
-		// knappar gui
-
-		// rita upp bilden använd detta i en inre klass istället efter lunch
-		JPanel karta = new JPanel();
-		karta.setLayout(null);
-		add(karta,BorderLayout.CENTER);
-		//JLabel lol = new JLabel();
-		//karta.add(lol);
-		//karta.drawImage(fc.getSelectedFile().getName());
-
-		//rita upp bilden
+		// knappar 
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setLocationRelativeTo(null);
 		pack();
 		setVisible(true);
 	}
 
 	//formulär NyForb
 	class NyForbindelse extends JPanel{
-		private JTextField nyNamn, nyTid;
+		private JTextField WayOfTravel, nyTid;
 
 		public NyForbindelse(){
-			//label där de städer som användaren har valt visas "Förbindelse mellan"+ punktA + " och "+ punktB, dela punkter kopplas till radiobuttons som är kodade till en lyssnare.
+			//För att skapa förbindelser mellan olika platser,
 
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			nyNamn = new JTextField(12);
+			WayOfTravel = new JTextField(12);
 			nyTid = new JTextField(6);
-			nyTid.setEnabled(false);//textField setEnable
+			//textField setEnable
 			JPanel rad = new JPanel();
 			//rad.add(new JLabel("Du åker från" + from + "och" + to));
 
 			JPanel rad1 = new JPanel();
 			rad1.add(new JLabel("Namn:"));
-			rad1.add(nyNamn);
+			rad1.add(WayOfTravel);
 			add(rad1);
 
 			JPanel rad2 = new JPanel();
@@ -114,15 +117,15 @@ public class ResePlanerare extends JFrame {
 			add(rad2);
 		}
 		public String getNamn(){
-			return nyNamn.getText();
+			return WayOfTravel.getText();
 		}
 		public int getTid(){
 			return Integer.parseInt(nyTid.getText());
 		}
 	}
-	//Formulär NyForb
+	//Form NyForb
 
-	//Formulär VisaForb
+	//Form VisaForb
 	class VisaForbindelse extends JPanel{
 		private JTextField viNamn, viTid;
 		private JPanel rad3, rad4, rad5;
@@ -154,7 +157,7 @@ public class ResePlanerare extends JFrame {
 			return Integer.parseInt(viTid.getText());
 		}
 	}
-	//Formulär VisaForb
+	//Form VisaForb
 
 	//Form ÄndraFörbindelse
 	class AndraForbindelse extends JPanel {
@@ -166,7 +169,7 @@ public class ResePlanerare extends JFrame {
 			AnNamn = new JTextField(12);
 			AnTid = new JTextField(6);
 			rad6 = new JPanel();
-			//
+			
 			rad7 = new JPanel();
 			rad7.add(new JLabel("Namn:"));
 			rad7.add(AnNamn);
@@ -186,6 +189,7 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//Form AndraFörbindelse
+	
 	// Ny plats form
 	class NyPlatsForm extends JPanel{
 		private JTextField NyPlats;
@@ -203,7 +207,8 @@ public class ResePlanerare extends JFrame {
 			return NyPlats.getText();
 		}
 	}
-	//Nyplats Form 
+	//Ny plats form 
+	
 	//Hitta väg form
 	class HittaVag extends JPanel{
 		private JTextArea hittaVag;
@@ -217,20 +222,6 @@ public class ResePlanerare extends JFrame {
 	}
 	//hitta väg form
 
-	//bilder
-	class Bilder extends JComponent{
-		private Image bild;
-
-		public Bilder(){
-			Toolkit tk = Toolkit.getDefaultToolkit();
-			bild = tk.getImage("My World.png");
-		}
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			g.drawImage(bild,  0,  0,  getWidth(),getHeight(), this);
-		}
-
-	}
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
@@ -254,12 +245,14 @@ public class ResePlanerare extends JFrame {
 		public void actionPerformed(ActionEvent ave){
 
 			NyPlatsForm nypform = new NyPlatsForm();
+			
 
 			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
-
-			//nynamn
-			// add. ListGraph och pltsen dyker upp på kartan när man trycker på ok.
-
+			
+			Node n = new Node(nypform.getNyPlats());
+			lg.add(n);
+			m = new MouseList();
+			picture.addMouseListener(m);
 		}
 	}
 	class NyForbLyss implements ActionListener{
@@ -292,34 +285,57 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
+			
+			String aktuellMapp = System.getProperty("user.dir");
+			JFileChooser fc = new JFileChooser(aktuellMapp);
 			int returnVal = fc.showOpenDialog(ResePlanerare.this);
 			if (returnVal != JFileChooser.APPROVE_OPTION)
 				return;
-
+		try {
 			File f = fc.getSelectedFile();
-			String filename = f.getAbsolutePath();
+			//String filename = f.getAbsolutePath();
 			if (picture != null)
 				remove(picture);
-			picture = new ImagePanel(filename);
+			img = ImageIO.read(f);
+			picture = new ImagePanel(img);
 			add(picture, BorderLayout.CENTER);
 			validate();
 			repaint();
 			pack();
-
-
-
-
-
-
-
 		}
-
-
-
+		catch(IOException e1){}
+	} // actionPerformed
+}
+	public class MouseList extends MouseAdapter{
+		public void mouseClicked(MouseEvent mev){
+			NodeGraphics n = new NodeGraphics(mev.getX(),mev.getY());
+			picture.add(n);
+			n.addMouseListener(new MouseSelectList());
+			validate();
+			repaint();
+			picture.removeMouseListener(m);
+			System.out.println("Clicked "+ mev.getX() +" "+" "+ mev.getY());
+		}
 	}
-
-	// menyfunktionalitet
+	public class MouseSelectList extends MouseAdapter{
+		public void mouseClicked(MouseEvent mev){
+			NodeGraphics temp = (NodeGraphics)mev.getSource();
+			if(sel1 == null)
+				sel1 = temp;
+			else if (sel2 == null)
+				sel2 = temp;
+			else{
+				sel1.setSelectedPinned(false);
+				sel1 = sel2;
+				sel2 = temp;
+			}
+			temp.setSelectedPinned(true);
+			
+			repaint();
+		}
+	}
+	
+// menyfunktionalitet
 
 
 
@@ -331,8 +347,15 @@ public class ResePlanerare extends JFrame {
 	public static void main(String[] args) {
 		new ResePlanerare(); 
 
-
-
+	}
+	static	{
+		Font f = new Font("Dialog", Font.BOLD, 18);
+		String[] comps = {"Button","Label", "RadioButton","CheckBox",
+							"ToggleButton", "TextArea","TextField",
+							"Menu", "MenuItem"};
+		for(String s : comps)
+			UIManager.put(s+ "Font", f);
+		}
 	}
 
-}
+

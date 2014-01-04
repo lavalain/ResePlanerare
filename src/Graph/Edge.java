@@ -1,3 +1,5 @@
+package Graph;
+
 
 public class Edge {
 	private Node destination;
@@ -21,7 +23,7 @@ public class Edge {
 	public int getWeight(){
 		return weight;
 	}
-	public void setWeight(int weight){
+	public void setWeight(int weigt){
 		this.weight = weight;
 	}
 	public String toString(){

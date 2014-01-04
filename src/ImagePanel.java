@@ -1,21 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ImagePanel extends JPanel{
-	private ImageIcon picture;
-	
-	ImagePanel(String filename){
-	picture = new ImageIcon(filename);
-	int w = picture.getIconWidth();
-	int h = picture.getIconHeight();
-	setPreferredSize(new Dimension(w,h));
-	setMaximumSize(new Dimension(w,h));
-	setMinimumSize(new Dimension(w,h));
+public class ImagePanel extends JPanel {
+	private Image picture;
+
+	public ImagePanel(Image i) {
+		setLayout(null);
+		setPreferredSize(new Dimension(i.getWidth(this),i.getHeight(this)));
+		picture = i;
+
 	}
-	
-	protected void paintComponent(Graphics g){
+
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(picture.getImage(), 0, 0, this);
+		g.drawImage(picture, 0, 0,getWidth(), getHeight(), this);
 	}
 
 }
