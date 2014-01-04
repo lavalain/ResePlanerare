@@ -23,6 +23,7 @@ public class NodeGraphics extends JComponent {
 		
 		g.fillOval(0, 0, getWidth(), getHeight());
 		System.out.println("nymålad");
+		
 	}
 
 	public void setSelectedPinned(boolean vald) {

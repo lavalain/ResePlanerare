@@ -1,16 +1,18 @@
 import Graph.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.awt.image.*;
 import java.io.*;
+import java.util.HashMap;
 import java.awt.event.MouseAdapter;
 
 
 public class ResePlanerare extends JFrame {
-	
+
 	private JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
 	private JMenu arkiv, op;
 	private JMenuBar meny;
@@ -18,11 +20,20 @@ public class ResePlanerare extends JFrame {
 	private ImagePanel picture = null;
 	private BufferedImage img;
 	private MouseList m;
-	private NodeGraphics sel1, sel2;
-	
-	
+	private NodeGraphics sel1, sel2, ng;
+	private NyPlatsForm nypform;
+	private NyForbindelse form;
+	private Node n;
+	private String Ename;
+	private int Wname;
+
+
+
 	private ListGraph lg = new ListGraph();
-	
+
+	private HashMap<NodeGraphics, Node> nng = new HashMap<NodeGraphics, Node>();
+
+
 
 	public ResePlanerare(){
 		super("ResePlanerare");
@@ -30,16 +41,16 @@ public class ResePlanerare extends JFrame {
 		//meny 
 		meny = new JMenuBar();
 		arkiv = new JMenu("Arkiv");
-		
+
 		ny = new JMenuItem("Ny");
 		add(ny, BorderLayout.NORTH);
 		ny.addActionListener(new NyKartaLyss());
-		
+
 		avsluta = new JMenuItem("Avsluta");
 		avsluta.addActionListener(new AvslutaLyss());
 		arkiv.add(ny);
 		arkiv.add(avsluta);
-		
+
 		meny.add(arkiv);
 
 		op = new JMenu("Operationer");
@@ -56,11 +67,11 @@ public class ResePlanerare extends JFrame {
 		op.add(menyVisa);
 		op.add(menyNyPlats);
 		op.add(menyNyForb);
-		
+
 		meny.add(op);
 		setJMenuBar(meny);
 		//meny	
-		
+
 		//Knappar 
 		JPanel north = new JPanel();
 		add(north, BorderLayout.NORTH);
@@ -142,6 +153,7 @@ public class ResePlanerare extends JFrame {
 			rad4.add(viNamn);
 			add(rad4);
 			viNamn.setEnabled(false);
+			viNamn.setText(Ename);
 
 
 			rad5 = new JPanel();
@@ -149,6 +161,7 @@ public class ResePlanerare extends JFrame {
 			rad5.add(viTid);
 			add(rad5);
 			viTid.setEnabled(false);
+			viTid.setText(Wname+ "");
 		}
 		public String getViNamn(){
 			return viNamn.getText();
@@ -169,17 +182,21 @@ public class ResePlanerare extends JFrame {
 			AnNamn = new JTextField(12);
 			AnTid = new JTextField(6);
 			rad6 = new JPanel();
-			
+			rad6.add(new JLabel ("Du kommer att ändra förbindelsen mellan" + nng.get(sel1) + " och " + nng.get(sel2)));
+			add(rad6);
+
 			rad7 = new JPanel();
 			rad7.add(new JLabel("Namn:"));
 			rad7.add(AnNamn);
 			add(rad7);
 			AnNamn.setEnabled(false);
+			AnNamn.setText(Ename);
 
 			rad8 = new JPanel();
 			rad8.add(new JLabel("Tid"));
 			rad8.add(AnTid);
 			add(rad8);
+			//AnTid.setText(Wname+"");
 		}
 		public String getAnNamn() {
 			return AnNamn.getText();
@@ -189,7 +206,7 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//Form AndraFörbindelse
-	
+
 	// Ny plats form
 	class NyPlatsForm extends JPanel{
 		private JTextField NyPlats;
@@ -208,7 +225,7 @@ public class ResePlanerare extends JFrame {
 		}
 	}
 	//Ny plats form 
-	
+
 	//Hitta väg form
 	class HittaVag extends JPanel{
 		private JTextArea hittaVag;
@@ -235,42 +252,71 @@ public class ResePlanerare extends JFrame {
 	class VisaForLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 
-			VisaForbindelse viform = new VisaForbindelse();
+			if(sel1 == null || sel2 == null)
+				JOptionPane.showMessageDialog(null, "Markera två noder");
+			
+				Edge em = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
+				if (em == null){
+					JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
+					return;
+				}
+				Wname = em.getWeight();
+				Ename = em.getName();
 
-			JOptionPane.showMessageDialog(null, viform, "Visa Förbindelse", JOptionPane.INFORMATION_MESSAGE);
+				VisaForbindelse viform = new VisaForbindelse();
 
+				JOptionPane.showMessageDialog(null, viform, "Visa Förbindelse", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	class NyPlatsLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 
-			NyPlatsForm nypform = new NyPlatsForm();
-			
+			nypform = new NyPlatsForm();
+
 
 			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
-			
-			Node n = new Node(nypform.getNyPlats());
+
+			n = new Node(nypform.getNyPlats());
 			lg.add(n);
 			m = new MouseList();
 			picture.addMouseListener(m);
+
 		}
 	}
 	class NyForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 
+			if(sel1 == null || sel2 == null){
+				JOptionPane.showMessageDialog(null, "Markera två noder");
+				return;
+			}
 			NyForbindelse form = new NyForbindelse();
 
 			int result = JOptionPane.showConfirmDialog(null, form, "Ny Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+		
+			lg.connect(nng.get(sel1), nng.get(sel2), form.getNamn(), form.getTid());
+			System.out.println("hejh");
+
+
 
 		}
 	}
 	class AndraForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
+			
+			Edge eng = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
+			if( eng == null){
+				JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
+				return;
+			}
+			Wname = eng.getWeight();
+			Ename = eng.getName();
 			AndraForbindelse anform = new AndraForbindelse();
 
 			int anRes = JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
-			//setWeight(); AnTid heter JTextfield som nya tiden anges i
+			lg.setConnectionWeight(nng.get(sel1), nng.get(sel2),anform.getAnTid());
+
+
 
 		}
 	}
@@ -285,36 +331,38 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			String aktuellMapp = System.getProperty("user.dir");
 			JFileChooser fc = new JFileChooser(aktuellMapp);
 			int returnVal = fc.showOpenDialog(ResePlanerare.this);
 			if (returnVal != JFileChooser.APPROVE_OPTION)
 				return;
-		try {
-			File f = fc.getSelectedFile();
-			//String filename = f.getAbsolutePath();
-			if (picture != null)
-				remove(picture);
-			img = ImageIO.read(f);
-			picture = new ImagePanel(img);
-			add(picture, BorderLayout.CENTER);
-			validate();
-			repaint();
-			pack();
-		}
-		catch(IOException e1){}
-	} // actionPerformed
-}
+			try {
+				File f = fc.getSelectedFile();
+				//String filename = f.getAbsolutePath();
+				if (picture != null)
+					remove(picture);
+				img = ImageIO.read(f);
+				picture = new ImagePanel(img);
+				add(picture, BorderLayout.CENTER);
+				validate();
+				repaint();
+				pack();
+			}
+			catch(IOException e1){}
+		} // actionPerformed
+	}
 	public class MouseList extends MouseAdapter{
 		public void mouseClicked(MouseEvent mev){
-			NodeGraphics n = new NodeGraphics(mev.getX(),mev.getY());
-			picture.add(n);
-			n.addMouseListener(new MouseSelectList());
+			ng = new NodeGraphics(mev.getX(),mev.getY());
+			picture.add(ng);
+			ng.addMouseListener(new MouseSelectList());
 			validate();
 			repaint();
 			picture.removeMouseListener(m);
+			nng.put(ng, n);
 			System.out.println("Clicked "+ mev.getX() +" "+" "+ mev.getY());
+
 		}
 	}
 	public class MouseSelectList extends MouseAdapter{
@@ -330,12 +378,12 @@ public class ResePlanerare extends JFrame {
 				sel2 = temp;
 			}
 			temp.setSelectedPinned(true);
-			
+
 			repaint();
 		}
 	}
-	
-// menyfunktionalitet
+
+	// menyfunktionalitet
 
 
 
@@ -351,11 +399,11 @@ public class ResePlanerare extends JFrame {
 	static	{
 		Font f = new Font("Dialog", Font.BOLD, 18);
 		String[] comps = {"Button","Label", "RadioButton","CheckBox",
-							"ToggleButton", "TextArea","TextField",
-							"Menu", "MenuItem"};
+				"ToggleButton", "TextArea","TextField",
+				"Menu", "MenuItem"};
 		for(String s : comps)
 			UIManager.put(s+ "Font", f);
-		}
 	}
+}
 
 

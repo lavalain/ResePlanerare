@@ -23,7 +23,7 @@ public class Edge {
 	public int getWeight(){
 		return weight;
 	}
-	public void setWeight(int weigt){
+	public void setWeight(int weight){
 		this.weight = weight;
 	}
 	public String toString(){

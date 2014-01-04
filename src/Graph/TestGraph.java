@@ -23,7 +23,9 @@ public class TestGraph {
 		g.connect(n2, n3, "Tåg", 8);
 		g.connect(n5, n2, "Flyg", 4);
 		
-		System.out.println(g.getPath(n1, n3));
+		g.setConnectionWeight(n1, n2, 5);
+		
+		System.out.println(g.getEdgeBetween(n1, n2));
 	}
 
 }
