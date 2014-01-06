@@ -108,14 +108,13 @@ public class ResePlanerare extends JFrame {
 		private JTextField WayOfTravel, nyTid;
 
 		public NyForbindelse(){
-			//För att skapa förbindelser mellan olika platser,
-
+			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			WayOfTravel = new JTextField(12);
 			nyTid = new JTextField(6);
-			//textField setEnable
+	
 			JPanel rad = new JPanel();
-			rad.add(new JLabel("Du åker från" + nng.get(sel1) + "och" + nng.get(sel2)));
+			rad.add(new JLabel(" Du åker från " + nng.get(sel1) + " och " + nng.get(sel2)));
 			add(rad);
 
 			JPanel rad1 = new JPanel();
@@ -337,7 +336,7 @@ public class ResePlanerare extends JFrame {
 				return;
 			try {
 				File f = fc.getSelectedFile();
-				//String filename = f.getAbsolutePath();
+		
 				if (picture != null)
 					remove(picture);
 				img = ImageIO.read(f);

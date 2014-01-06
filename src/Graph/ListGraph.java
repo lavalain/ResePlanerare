@@ -4,7 +4,7 @@ import java.util.*;
 public class ListGraph {
 
 	private Map <Node, List<Edge>> network = new HashMap<Node, List<Edge>>();
-
+	private Node minNode;
 	public void add(Node ny){
 		if(network.containsKey(ny))
 			throw new IllegalArgumentException("Stad finns redan vid add");
@@ -92,18 +92,37 @@ public class ListGraph {
 		e.setWeight(weight);
 	}
 
-public LinkedList<Edge> bestWay(Node from, Node to){
-	Map<Node, Integer> tid = new HashMap<Node, Integer>();
-	Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
-	Map<Node, Node> viadest = new HashMap <Node, Node>();
-	Set<Node> s = getNodes();
-	for (Node temp : s ){
-		tid.put(temp, Integer.MAX_VALUE);
-		snabbast.put(temp, false);
-		viadest.put(temp, null);
+	public LinkedList<Edge> bestWay(Node from, Node to){
+		Map<Node, Integer> tid = new HashMap<Node, Integer>();
+		Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
+		Map<Node, Node> viadest = new HashMap <Node, Node>();
+		Set<Node> s = getNodes();
+		for (Node temp : s ){
+			tid.put(temp, Integer.MAX_VALUE);
+			snabbast.put(temp, false);
+			viadest.put(temp, null);
+		}
+		viadest.put(from, from);
+		tid.put(from, 0);
+		Node aktuell = from;
+		for (Node temp : s){
+			if(minNode == null){
+				minNode = temp;
+			}
+			if(tid.get(temp) < tid.get(minNode)){
+				minNode = temp;	
+			}
+		}
+		snabbast.put(minNode, true);
+		viadest.put(minNode, aktuell);
+		aktuell = minNode;
+		for (Edge e : getEdgesFrom(aktuell)){
+			tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
+		}
+		
+		
+		
+		return null;
 	}
-	
-	return null;
-}
 }
 
