@@ -25,7 +25,8 @@ public class TestGraph {
 		
 		g.setConnectionWeight(n1, n2, 5);
 		
-		System.out.println(g.getEdgeBetween(n1, n2));
+		//g.bestWay(n1,n3);
+		System.out.println(g.bestWay(n1, n2));
 	}
 
 }

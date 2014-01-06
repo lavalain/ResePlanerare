@@ -72,6 +72,7 @@ public class ListGraph {
 		Set<Node> visited = new HashSet<Node>();
 		Map<Node, Node> via = new HashMap<Node, Node>();
 		depthFirstSearch2(from, null, visited, via);
+
 		LinkedList<Edge> path = new LinkedList<Edge>();
 		Node whereTo = to;
 		while(whereTo != from){
@@ -96,6 +97,7 @@ public class ListGraph {
 		Map<Node, Integer> tid = new HashMap<Node, Integer>();
 		Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
 		Map<Node, Node> viadest = new HashMap <Node, Node>();
+		LinkedList<Edge> path = new LinkedList<Edge>();
 		Set<Node> s = getNodes();
 		for (Node temp : s ){
 			tid.put(temp, Integer.MAX_VALUE);
@@ -105,24 +107,31 @@ public class ListGraph {
 		viadest.put(from, from);
 		tid.put(from, 0);
 		Node aktuell = from;
-		for (Node temp : s){
-			if(minNode == null){
-				minNode = temp;
+
+		while(minNode == to){
+
+			for (Node temp : s){
+				if(minNode == null){
+					minNode = temp;
+				}
+				if(tid.get(temp) < tid.get(minNode)){
+					minNode = temp;	
+				}
 			}
-			if(tid.get(temp) < tid.get(minNode)){
-				minNode = temp;	
+			snabbast.put(minNode, true);
+			viadest.put(minNode, aktuell);
+			Edge el = getEdgeBetween(minNode, aktuell);
+			aktuell = minNode;
+			for (Edge e : getEdgesFrom(aktuell)){
+				tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
+				viadest.put(from, e.getDestination());
+				//Edge ep = getEdgeBetween(viadest.get(from), viadest.get(to));
+				path.addFirst(el);
+				
 			}
 		}
-		snabbast.put(minNode, true);
-		viadest.put(minNode, aktuell);
-		aktuell = minNode;
-		for (Edge e : getEdgesFrom(aktuell)){
-			tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
-		}
-		
-		
-		
-		return null;
+		return path;
 	}
+	
 }
 
