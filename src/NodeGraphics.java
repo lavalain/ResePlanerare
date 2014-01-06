@@ -2,15 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+
 public class NodeGraphics extends JComponent {
 
 	private boolean vald = false;
+	private String name;
 
-	public NodeGraphics(int x, int y) {
-		setBounds(x, y, 25, 25);
-		setPreferredSize(new Dimension(25, 25));
-		setMaximumSize(new Dimension(25, 25));
-		setMinimumSize(new Dimension(25, 25));
+	public NodeGraphics(int x, int y, String name) {
+		this.name = name;
+		setBounds(x, y, 65, 65);
+		setPreferredSize(new Dimension(65, 65));
+		setMaximumSize(new Dimension(65, 65));
+		setMinimumSize(new Dimension(65, 65));
 		System.out.println("Skapar ny nod");
 	}
 
@@ -21,13 +25,12 @@ public class NodeGraphics extends JComponent {
 		 else 
 			g.setColor(Color.RED);	
 		
-		g.fillOval(0, 0, getWidth(), getHeight());
-		System.out.println("nymålad");
-		
+		g.fillOval(0, 0, 20, 20);
+		g.setColor(Color.BLACK);
+		g.drawString(name, 5,30);	
 	}
 
 	public void setSelectedPinned(boolean vald) {
 		this.vald = vald;
-
 	}
 }

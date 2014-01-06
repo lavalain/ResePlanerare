@@ -1,4 +1,5 @@
 import Graph.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -8,6 +9,7 @@ import java.io.File;
 import java.awt.image.*;
 import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.awt.event.MouseAdapter;
 
 
@@ -26,14 +28,12 @@ public class ResePlanerare extends JFrame {
 	private Node n;
 	private String Ename;
 	private int Wname;
-
-
+	private String str;
+	private LinkedList<Edge> eLList;
+	private JTextArea hittaVag;
 
 	private ListGraph lg = new ListGraph();
-
 	private HashMap<NodeGraphics, Node> nng = new HashMap<NodeGraphics, Node>();
-
-
 
 	public ResePlanerare(){
 		super("ResePlanerare");
@@ -115,7 +115,8 @@ public class ResePlanerare extends JFrame {
 			nyTid = new JTextField(6);
 			//textField setEnable
 			JPanel rad = new JPanel();
-			//rad.add(new JLabel("Du åker från" + from + "och" + to));
+			rad.add(new JLabel("Du åker från" + nng.get(sel1) + "och" + nng.get(sel2)));
+			add(rad);
 
 			JPanel rad1 = new JPanel();
 			rad1.add(new JLabel("Namn:"));
@@ -146,7 +147,8 @@ public class ResePlanerare extends JFrame {
 			viNamn = new JTextField(12);
 			viTid = new JTextField(6);
 			rad3 = new JPanel();
-			// visa de förbindelser som finns mellan from och to och vilken tid det tar att resa mellan dessa
+			rad3.add(new JLabel(" mellan " + nng.get(sel1) + " och "+ nng.get(sel2)));
+			add(rad3);
 
 			rad4 = new JPanel();
 			rad4.add(new JLabel("Namn:"));
@@ -154,7 +156,6 @@ public class ResePlanerare extends JFrame {
 			add(rad4);
 			viNamn.setEnabled(false);
 			viNamn.setText(Ename);
-
 
 			rad5 = new JPanel();
 			rad5.add(new JLabel("Tid"));
@@ -228,13 +229,15 @@ public class ResePlanerare extends JFrame {
 
 	//Hitta väg form
 	class HittaVag extends JPanel{
-		private JTextArea hittaVag;
 
 		public HittaVag(){
 			setLayout(new FlowLayout());
 			hittaVag = new JTextArea(1,10);
+			for (Edge e : eLList){
+				hittaVag.append(e.toString());
+			}
 			hittaVag.setEditable(false);
-			add(new JScrollPane(hittaVag));	
+			add(new JScrollPane(hittaVag));		
 		}
 	}
 	//hitta väg form
@@ -242,11 +245,12 @@ public class ResePlanerare extends JFrame {
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
+			
+			eLList = lg.getPath(nng.get(sel1), nng.get(sel2));
+			
 			HittaVag hiform = new HittaVag();
 
 			JOptionPane.showMessageDialog(null, hiform, "Hitta väg", JOptionPane.INFORMATION_MESSAGE);
-
 		}
 	}
 	class VisaForLyss implements ActionListener{
@@ -270,17 +274,11 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyPlatsLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
-			nypform = new NyPlatsForm();
-
-
-			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
-
-			n = new Node(nypform.getNyPlats());
-			lg.add(n);
+			Cursor c = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+			picture.setCursor(c);
 			m = new MouseList();
 			picture.addMouseListener(m);
-
+			
 		}
 	}
 	class NyForbLyss implements ActionListener{
@@ -354,14 +352,23 @@ public class ResePlanerare extends JFrame {
 	}
 	public class MouseList extends MouseAdapter{
 		public void mouseClicked(MouseEvent mev){
-			ng = new NodeGraphics(mev.getX(),mev.getY());
+			nypform = new NyPlatsForm();
+
+			str = nypform.getNyPlats();
+			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
+
+			n = new Node(nypform.getNyPlats());
+			lg.add(n);
+			ng = new NodeGraphics(mev.getX(),mev.getY(),nypform.getNyPlats());
 			picture.add(ng);
 			ng.addMouseListener(new MouseSelectList());
 			validate();
 			repaint();
 			picture.removeMouseListener(m);
+			Cursor c = Cursor.getDefaultCursor();
+			picture.setCursor(c);
 			nng.put(ng, n);
-			System.out.println("Clicked "+ mev.getX() +" "+" "+ mev.getY());
+			
 
 		}
 	}

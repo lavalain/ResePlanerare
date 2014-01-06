@@ -68,9 +68,9 @@ public class ListGraph {
 			if(!visited.contains(e.getDestination()))
 				depthFirstSearch2(e.getDestination(),where, visited, via);
 	}
-	public List<Edge> getPath(Node from, Node to){
+	public LinkedList<Edge> getPath(Node from, Node to){
 		Set<Node> visited = new HashSet<Node>();
-		Map<Node, Node> via= new HashMap<Node, Node>();
+		Map<Node, Node> via = new HashMap<Node, Node>();
 		depthFirstSearch2(from, null, visited, via);
 		LinkedList<Edge> path = new LinkedList<Edge>();
 		Node whereTo = to;
@@ -91,5 +91,19 @@ public class ListGraph {
 		e = getEdgeBetween(to, from);
 		e.setWeight(weight);
 	}
+
+public LinkedList<Edge> bestWay(Node from, Node to){
+	Map<Node, Integer> tid = new HashMap<Node, Integer>();
+	Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
+	Map<Node, Node> viadest = new HashMap <Node, Node>();
+	Set<Node> s = getNodes();
+	for (Node temp : s ){
+		tid.put(temp, Integer.MAX_VALUE);
+		snabbast.put(temp, false);
+		viadest.put(temp, null);
+	}
+	
+	return null;
+}
 }
 
