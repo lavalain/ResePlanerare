@@ -92,13 +92,20 @@ public class ListGraph {
 		e = getEdgeBetween(to, from);
 		e.setWeight(weight);
 	}
+	public boolean isEmpty(){
+		return network.isEmpty();
+	}
+	public void clear(){
+		network.clear();
+	}
 
 	public LinkedList<Edge> bestWay(Node from, Node to){
 		Map<Node, Integer> tid = new HashMap<Node, Integer>();
 		Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
 		Map<Node, Node> viadest = new HashMap <Node, Node>();
 		LinkedList<Edge> path = new LinkedList<Edge>();
-		Set<Node> s = getNodes();
+		//Set<Node> s = getNodes();
+		Set<Node> s = network.keySet();
 		for (Node temp : s ){
 			tid.put(temp, Integer.MAX_VALUE);
 			snabbast.put(temp, false);
@@ -108,30 +115,41 @@ public class ListGraph {
 		tid.put(from, 0);
 		Node aktuell = from;
 
-		while(minNode == to){
-
+		while(snabbast.get(to) != true){
+			minNode = null;
 			for (Node temp : s){
-				if(minNode == null){
+				if(minNode == null && !snabbast.get(temp)){
 					minNode = temp;
 				}
-				if(tid.get(temp) < tid.get(minNode)){
+				if(minNode != null && tid.get(temp) < tid.get(minNode) && !snabbast.get(minNode)){
 					minNode = temp;	
 				}
 			}
 			snabbast.put(minNode, true);
 			viadest.put(minNode, aktuell);
-			Edge el = getEdgeBetween(minNode, aktuell);
 			aktuell = minNode;
 			for (Edge e : getEdgesFrom(aktuell)){
+				if(!snabbast.get(e.getDestination())){	
 				tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
-				viadest.put(from, e.getDestination());
-				//Edge ep = getEdgeBetween(viadest.get(from), viadest.get(to));
-				path.addFirst(el);
-				
 			}
 		}
-		return path;
+			
+	}
+		for ( Node n : s){
+			System.out.println(n + "\t\t\t" + tid.get(n) + "\t" + snabbast.get(n) + "\t" + viadest.get(n));
+		}
+			aktuell = to;
+			Node nästa;
+			while(aktuell != viadest.get(aktuell)){
+				nästa = viadest.get(aktuell);
+				System.out.println(" nästa " + nästa + " Aktuell " + aktuell);
+				Edge e = getEdgeBetween(nästa, aktuell);
+				path.addFirst(e);
+				aktuell = nästa;
+			}
+		return path ;
 	}
 	
-}
 
+
+}

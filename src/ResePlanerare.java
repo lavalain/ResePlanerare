@@ -2,6 +2,7 @@ import Graph.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -328,9 +329,16 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			
+			if(!lg.isEmpty()){
+				lg.clear();	
+			}
 
 			String aktuellMapp = System.getProperty("user.dir");
 			JFileChooser fc = new JFileChooser(aktuellMapp);
+			FileNameExtensionFilter fnef = new FileNameExtensionFilter("bilder", "jpg", "png","gif");
+			fc.setFileFilter(fnef);
+			System.out.println("filter!!!!");
 			int returnVal = fc.showOpenDialog(ResePlanerare.this);
 			if (returnVal != JFileChooser.APPROVE_OPTION)
 				return;
