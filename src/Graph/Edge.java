@@ -1,20 +1,20 @@
 package Graph;
 
 
-public class Edge {
-	private Node destination;
+public class Edge <T>{
+	private T destination;
 	private String name;
 	private int weight;
 	
-	public Edge (Node destination, String name, int weight){
+	public Edge (T destination, String name, int weight){
 		if (weight < 0)
 			throw new IllegalArgumentException("negativ vikt");
-		this.destination = destination;
+		this.destination =  destination;
 		this.name = name;
 		this.weight = weight;
 		
 	}
-	public Node getDestination(){
+	public T getDestination(){
 		return destination;
 	}
 	public String getName(){

@@ -1,93 +1,93 @@
 package Graph;
 
 import java.util.*;
-public class ListGraph {
+public class ListGraph <T> {
 
-	private Map <Node, List<Edge>> network = new HashMap<Node, List<Edge>>();
-	private Node minNode;
-	public void add(Node ny){
+	private Map <T , List<Edge <T>>> network = new HashMap<T, List<Edge <T>>>();
+	private T minNode;
+	public void add(T ny){
 		if(network.containsKey(ny))
 			throw new IllegalArgumentException("Stad finns redan vid add");
 
-		network.put(ny, new ArrayList<Edge>());
+		network.put(ny, new ArrayList<Edge <T>>());
 		System.out.println(" addad nod");
 	}
-	public void connect(Node from, Node to, String name, int weight){
+	public void connect(T from, T to, String name, int weight){
 		if (!network.containsKey(from)|| !network.containsKey(to))
 			throw new NoSuchElementException("det finns ingen stad");
 
-		Edge e1 = new Edge(to, name, weight);
-		List<Edge> fromList = network.get(from);
+		Edge <T> e1 = new Edge <T> (to, name, weight);
+		List<Edge <T>> fromList = network.get(from);
 		fromList.add(e1);
 
-		Edge e2 = new Edge(from, name, weight);
-		List<Edge> toList = network.get(to);
+		Edge <T> e2 = new Edge <T> (from, name, weight);
+		List<Edge <T>> toList = network.get(to);
 		toList.add(e2);	
 	}
 	public String toString(){
 		String str = " ";
-		for (Map.Entry<Node, List<Edge>> me: network.entrySet()) 
+		for (Map.Entry<T, List<Edge <T>>> me: network.entrySet()) 
 			str += me.getKey() +" " + me.getValue() + "\n";
 		return str;
 	}
-	public boolean pathExists (Node from, Node to){
-		Set<Node> visited = new HashSet<Node>();
+	public boolean pathExists (T from, T to){
+		Set<T> visited = new HashSet<T>();
 		depthFirstSearch(from, visited);
 		return visited.contains(to);
 	}
-	private void depthFirstSearch(Node n, Set<Node> visited){
+	private void depthFirstSearch(T n, Set<T> visited){
 		visited.add(n);
-		for (Edge e : network.get(n))
+		for (Edge <T> e : network.get(n))
 			if(!visited.contains(e.getDestination()))
 				depthFirstSearch(e.getDestination(), visited);
 	}
-	public Set<Node> getNodes(){
-		return new HashSet<Node>(network.keySet());
+	public Set<T> getNodes(){
+		return new HashSet<T>(network.keySet());
 	}
-	public Edge getEdgeBetween (Node from, Node to) {
+	public Edge <T> getEdgeBetween (T from, T to) {
 		if(!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Det finns ingen Nod");
 		}
-		for(Edge e :network.get(from)){
+		for(Edge <T> e :network.get(from)){
 			if(e.getDestination().equals(to))
 				return  e;
 		}
 		return null;
 	}
 
-	public Set<Edge> getEdgesFrom (Node from){
+	public Set<Edge <T>> getEdgesFrom (T from){
 		if(!network.containsKey(from)){
 			throw new NoSuchElementException("det finns inte någon sådan Nod");
 		}
-		return new HashSet<Edge>(network.get(from));			
+		return new HashSet<Edge <T>> (network.get(from));			
 	}
-	public void depthFirstSearch2(Node where, Node fromWhere, Set<Node>visited, Map<Node,Node>via){
+	public void depthFirstSearch2(T where, T fromWhere, Set<T>visited, Map<T,T>via){
 		visited.add(where);
 		via.put(where, fromWhere);
-		for(Edge e : network.get(where))
+		for(Edge <T> e : network.get(where))
 			if(!visited.contains(e.getDestination()))
 				depthFirstSearch2(e.getDestination(),where, visited, via);
 	}
-	public LinkedList<Edge> getPath(Node from, Node to){
-		Set<Node> visited = new HashSet<Node>();
-		Map<Node, Node> via = new HashMap<Node, Node>();
+	public LinkedList<Edge <T>> getPath(T from, T to){
+		Set<T> visited = new HashSet<T>();
+		Map<T, T> via = new HashMap<T, T>();
 		depthFirstSearch2(from, null, visited, via);
 
-		LinkedList<Edge> path = new LinkedList<Edge>();
-		Node whereTo = to;
+		LinkedList<Edge <T>> path = new LinkedList<Edge <T>>();
+		T whereTo = to;
 		while(whereTo != from){
-			Node whereFrom = via.get(whereTo);
-			Edge e = getEdgeBetween(whereFrom, whereTo);
+			T whereFrom = via.get(whereTo);
+			Edge <T> e = getEdgeBetween(whereFrom, whereTo);
 			path.addFirst(e);
 			whereTo = whereFrom;
 		}
 		return path;	
 	}
-	public void setConnectionWeight(Node from, Node to, int weight){
+	public void setConnectionWeight(T from, T to, int weight){
 		if(!pathExists(from, to) ||!network.containsKey(from) || !network.containsKey(to)){
 			throw new NoSuchElementException("Någon av noderna finns inte, eller så finns ingen väg mellan dessa");
 		}
-		Edge e = getEdgeBetween(from, to);
+		Edge <T> e = getEdgeBetween(from, to);
 		e.setWeight(weight);
 		e = getEdgeBetween(to, from);
 		e.setWeight(weight);
@@ -99,51 +99,58 @@ public class ListGraph {
 		network.clear();
 	}
 
-	public LinkedList<Edge> bestWay(Node from, Node to){
-		Map<Node, Integer> tid = new HashMap<Node, Integer>();
-		Map<Node, Boolean> snabbast = new HashMap <Node, Boolean>();
-		Map<Node, Node> viadest = new HashMap <Node, Node>();
-		LinkedList<Edge> path = new LinkedList<Edge>();
-		//Set<Node> s = getNodes();
-		Set<Node> s = network.keySet();
-		for (Node temp : s ){
+	public LinkedList<Edge <T>> bestWay(T from, T to){
+		Map<T, Integer> tid = new HashMap<T, Integer>();
+		Map<T, Boolean> snabbast = new HashMap <T, Boolean>();
+		Map<T, T> viadest = new HashMap <T, T>();
+		LinkedList<Edge <T>> path = new LinkedList<Edge <T>>();
+		Set<T> s = getNodes();
+		for (T temp : s ){
 			tid.put(temp, Integer.MAX_VALUE);
 			snabbast.put(temp, false);
 			viadest.put(temp, null);
 		}
 		viadest.put(from, from);
 		tid.put(from, 0);
-		Node aktuell = from;
+		T aktuell = from;
 
 		while(snabbast.get(to) != true){
 			minNode = null;
-			for (Node temp : s){
+			for (T temp : s){
 				if(minNode == null && !snabbast.get(temp)){
 					minNode = temp;
+					System.out.println("Startminimum : "+ minNode);
+					
+					
 				}
-				if(minNode != null && tid.get(temp) < tid.get(minNode) && !snabbast.get(minNode)){
-					minNode = temp;	
+				if((minNode != null && tid.get(temp) < tid.get(minNode)) && !snabbast.get(temp)){
+					minNode = temp;
+					System.out.println("efter den jobbiga ifsatsen kommer min nod: " + minNode);
+						
 				}
 			}
+			System.out.println("Den nya minNode är = " + minNode);
 			snabbast.put(minNode, true);
 			viadest.put(minNode, aktuell);
 			aktuell = minNode;
-			for (Edge e : getEdgesFrom(aktuell)){
+			for (Edge <T> e : getEdgesFrom(aktuell)){
+				
 				if(!snabbast.get(e.getDestination())){	
 				tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
+				System.out.println("Aktuella noden: " + aktuell + " " + e.getDestination()+ "  " + tid.get(e.getDestination()));
 			}
 		}
 			
 	}
-		for ( Node n : s){
+		for ( T n : s){
 			System.out.println(n + "\t\t\t" + tid.get(n) + "\t" + snabbast.get(n) + "\t" + viadest.get(n));
 		}
 			aktuell = to;
-			Node nästa;
+			T nästa;
 			while(aktuell != viadest.get(aktuell)){
 				nästa = viadest.get(aktuell);
 				System.out.println(" nästa " + nästa + " Aktuell " + aktuell);
-				Edge e = getEdgeBetween(nästa, aktuell);
+				Edge <T> e = getEdgeBetween(nästa, aktuell);
 				path.addFirst(e);
 				aktuell = nästa;
 			}

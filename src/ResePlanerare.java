@@ -16,6 +16,10 @@ import java.awt.event.MouseAdapter;
 
 public class ResePlanerare extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
 	private JMenu arkiv, op;
 	private JMenuBar meny;
@@ -25,7 +29,7 @@ public class ResePlanerare extends JFrame {
 	private MouseList m;
 	private NodeGraphics sel1, sel2, ng;
 	private NyPlatsForm nypform;
-	private NyForbindelse form;
+	//private NyForbindelse form;
 	private Node n;
 	private String Ename;
 	private int Wname;
@@ -33,7 +37,7 @@ public class ResePlanerare extends JFrame {
 	private LinkedList<Edge> eLList;
 	private JTextArea hittaVag;
 
-	private ListGraph lg = new ListGraph();
+	private ListGraph  lg = new ListGraph ();
 	private HashMap<NodeGraphics, Node> nng = new HashMap<NodeGraphics, Node>();
 
 	public ResePlanerare(){
@@ -75,6 +79,7 @@ public class ResePlanerare extends JFrame {
 
 		//Knappar 
 		JPanel north = new JPanel();
+		north.setLayout(new GridLayout(1,5));
 		add(north, BorderLayout.NORTH);
 
 		JButton hitta = new JButton("Hitta väg");
@@ -106,6 +111,10 @@ public class ResePlanerare extends JFrame {
 
 	//formulär NyForb
 	class NyForbindelse extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextField WayOfTravel, nyTid;
 
 		public NyForbindelse(){
@@ -139,6 +148,10 @@ public class ResePlanerare extends JFrame {
 
 	//Form VisaForb
 	class VisaForbindelse extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextField viNamn, viTid;
 		private JPanel rad3, rad4, rad5;
 
@@ -175,6 +188,10 @@ public class ResePlanerare extends JFrame {
 
 	//Form ÄndraFörbindelse
 	class AndraForbindelse extends JPanel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextField AnNamn, AnTid;
 		private JPanel rad6, rad7, rad8;
 
@@ -210,6 +227,10 @@ public class ResePlanerare extends JFrame {
 
 	// Ny plats form
 	class NyPlatsForm extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextField NyPlats;
 		private JPanel rad9;
 
@@ -230,6 +251,11 @@ public class ResePlanerare extends JFrame {
 	//Hitta väg form
 	class HittaVag extends JPanel{
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public HittaVag(){
 			setLayout(new FlowLayout());
 			hittaVag = new JTextArea(1,10);
@@ -237,15 +263,17 @@ public class ResePlanerare extends JFrame {
 				hittaVag.append(e.toString());
 			}
 			hittaVag.setEditable(false);
-			add(new JScrollPane(hittaVag));		
+			add(new JScrollPane(hittaVag));	
+			
 		}
 	}
 	//hitta väg form
 
 	//Lyssnarmetoder
-	class HittaLyss implements ActionListener{
+	class HittaLyss implements ActionListener{ 
 		public void actionPerformed(ActionEvent ave){
 			
+			 
 			eLList = lg.getPath(nng.get(sel1), nng.get(sel2));
 			
 			HittaVag hiform = new HittaVag();

@@ -6,6 +6,10 @@ import java.awt.event.*;
 
 public class NodeGraphics extends JComponent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean vald = false;
 	private String name;
 
