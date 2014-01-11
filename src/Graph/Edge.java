@@ -1,6 +1,7 @@
 package Graph;
 
 
+
 public class Edge <T>{
 	private T destination;
 	private String name;
@@ -27,6 +28,6 @@ public class Edge <T>{
 		this.weight = weight;
 	}
 	public String toString(){
-		return " till " + destination + " "+ " med " + name + ": " + weight;
+		return "Från   till " + destination + " "+ " med " + name + ": " + weight;
 	}
 }

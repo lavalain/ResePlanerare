@@ -23,7 +23,7 @@ public class ResePlanerare extends JFrame {
 	private JMenuItem ny, avsluta, menyHitta, menyVisa, menyNyPlats, menyNyForb;
 	private JMenu arkiv, op;
 	private JMenuBar meny;
-	private JFileChooser fc;
+	//private JFileChooser fc;
 	private ImagePanel picture = null;
 	private BufferedImage img;
 	private MouseList m;
@@ -34,10 +34,10 @@ public class ResePlanerare extends JFrame {
 	private String Ename;
 	private int Wname;
 	private String str;
-	private LinkedList<Edge> eLList;
+	private LinkedList <Edge<Node>> eLList;
 	private JTextArea hittaVag;
 
-	private ListGraph  lg = new ListGraph ();
+	private ListGraph <Node>lg = new ListGraph  <Node>();
 	private HashMap<NodeGraphics, Node> nng = new HashMap<NodeGraphics, Node>();
 
 	public ResePlanerare(){
@@ -259,7 +259,7 @@ public class ResePlanerare extends JFrame {
 		public HittaVag(){
 			setLayout(new FlowLayout());
 			hittaVag = new JTextArea(1,10);
-			for (Edge e : eLList){
+			for (Edge <Node> e : eLList){
 				hittaVag.append(e.toString());
 			}
 			hittaVag.setEditable(false);
@@ -272,9 +272,10 @@ public class ResePlanerare extends JFrame {
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{ 
 		public void actionPerformed(ActionEvent ave){
-			
-			 
-			eLList = lg.getPath(nng.get(sel1), nng.get(sel2));
+		
+			if(!lg.pathExists(nng.get(sel1), nng.get(sel2)))
+				JOptionPane.showMessageDialog(ResePlanerare.this, "Det finns ingen förbindelse mellan dessa platser", "FelMeddelande", JOptionPane.ERROR_MESSAGE);
+			eLList = lg.fastPath(nng.get(sel1), nng.get(sel2));
 			
 			HittaVag hiform = new HittaVag();
 
@@ -287,7 +288,7 @@ public class ResePlanerare extends JFrame {
 			if(sel1 == null || sel2 == null)
 				JOptionPane.showMessageDialog(null, "Markera två noder");
 			
-				Edge em = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
+				Edge <Node> em = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
 				if (em == null){
 					JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
 					return;
@@ -318,10 +319,10 @@ public class ResePlanerare extends JFrame {
 			}
 			NyForbindelse form = new NyForbindelse();
 
-			int result = JOptionPane.showConfirmDialog(null, form, "Ny Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+			JOptionPane.showConfirmDialog(null, form, "Ny Förbindelse", JOptionPane.OK_CANCEL_OPTION);
 		
 			lg.connect(nng.get(sel1), nng.get(sel2), form.getNamn(), form.getTid());
-			System.out.println("hejh");
+			
 
 
 
@@ -330,7 +331,7 @@ public class ResePlanerare extends JFrame {
 	class AndraForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 			
-			Edge eng = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
+			Edge <Node> eng = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
 			if( eng == null){
 				JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
 				return;
@@ -339,7 +340,7 @@ public class ResePlanerare extends JFrame {
 			Ename = eng.getName();
 			AndraForbindelse anform = new AndraForbindelse();
 
-			int anRes = JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+			JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
 			lg.setConnectionWeight(nng.get(sel1), nng.get(sel2),anform.getAnTid());
 
 
@@ -390,19 +391,20 @@ public class ResePlanerare extends JFrame {
 			nypform = new NyPlatsForm();
 
 			str = nypform.getNyPlats();
-			int rest = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
+			JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
 
 			n = new Node(nypform.getNyPlats());
 			lg.add(n);
 			ng = new NodeGraphics(mev.getX(),mev.getY(),nypform.getNyPlats());
 			picture.add(ng);
 			ng.addMouseListener(new MouseSelectList());
-			validate();
-			repaint();
 			picture.removeMouseListener(m);
 			Cursor c = Cursor.getDefaultCursor();
 			picture.setCursor(c);
 			nng.put(ng, n);
+			validate();
+			repaint();
+			picture.removeMouseListener(m);
 			
 
 		}
@@ -422,6 +424,7 @@ public class ResePlanerare extends JFrame {
 			temp.setSelectedPinned(true);
 
 			repaint();
+			
 		}
 	}
 

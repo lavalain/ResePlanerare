@@ -1,6 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+
 
 
 
@@ -32,7 +32,7 @@ public class NodeGraphics extends JComponent {
 		g.fillOval(0, 0, 20, 20);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("TimesNewRoman",Font.BOLD,15));
-		g.drawString(name, 2,40);	
+		g.drawString(name, 2,50);	
 	}
 
 	public void setSelectedPinned(boolean vald) {

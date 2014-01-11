@@ -31,7 +31,7 @@ public class TestGraph {
 		//g.setConnectionWeight(n1, n2, 5);
 		
 		//g.bestWay(n1,n3);
-		System.out.println(g.bestWay(n1, n4));
+		System.out.println(g.fastPath(n2, n6));
 	}
 
 }
