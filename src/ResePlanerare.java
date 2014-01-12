@@ -118,11 +118,11 @@ public class ResePlanerare extends JFrame {
 		private JTextField WayOfTravel, nyTid;
 
 		public NyForbindelse(){
-			
+
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			WayOfTravel = new JTextField(12);
 			nyTid = new JTextField(6);
-	
+
 			JPanel rad = new JPanel();
 			rad.add(new JLabel(" Du åker från " + nng.get(sel1) + " och " + nng.get(sel2)));
 			add(rad);
@@ -268,7 +268,7 @@ public class ResePlanerare extends JFrame {
 			hittaVag.append(" Den totala tiden är:" + totalVikt);
 			hittaVag.setEditable(false);
 			add(new JScrollPane(hittaVag));	
-			
+
 		}
 	}
 	//hitta väg form
@@ -276,14 +276,14 @@ public class ResePlanerare extends JFrame {
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{ 
 		public void actionPerformed(ActionEvent ave){
-		
+
 			if(!lg.pathExists(nng.get(sel1), nng.get(sel2))){
 				JOptionPane.showMessageDialog(ResePlanerare.this, "Det finns ingen förbindelse mellan dessa platser", "FelMeddelande", JOptionPane.ERROR_MESSAGE);
-				
-			return;
-		}
+
+				return;
+			}
 			eLList = lg.fastPath(nng.get(sel1), nng.get(sel2));
-			
+
 			HittaVag hiform = new HittaVag();
 
 			JOptionPane.showMessageDialog(null, hiform, "Hitta väg", JOptionPane.INFORMATION_MESSAGE);
@@ -294,18 +294,18 @@ public class ResePlanerare extends JFrame {
 
 			if(sel1 == null || sel2 == null)
 				JOptionPane.showMessageDialog(null, "Markera två noder");
-			
-				Edge <Node> em = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
-				if (em == null){
-					JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
-					return;
-				}
-				Wname = em.getWeight();
-				Ename = em.getName();
 
-				VisaForbindelse viform = new VisaForbindelse();
+			Edge <Node> em = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
+			if (em == null){
+				JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
+				return;
+			}
+			Wname = em.getWeight();
+			Ename = em.getName();
 
-				JOptionPane.showMessageDialog(null, viform, "Visa Förbindelse", JOptionPane.INFORMATION_MESSAGE);
+			VisaForbindelse viform = new VisaForbindelse();
+
+			JOptionPane.showMessageDialog(null, viform, "Visa Förbindelse", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	class NyPlatsLyss implements ActionListener{
@@ -314,7 +314,7 @@ public class ResePlanerare extends JFrame {
 			picture.setCursor(c);
 			m = new MouseList();
 			picture.addMouseListener(m);
-			
+
 		}
 	}
 	class NyForbLyss implements ActionListener{
@@ -325,19 +325,24 @@ public class ResePlanerare extends JFrame {
 				return;
 			}
 			NyForbindelse form = new NyForbindelse();
+			while(true){
+				try{
+					int svar = JOptionPane.showConfirmDialog(null, form, "Ny Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+					if(svar != JOptionPane.OK_OPTION)
+						return;
 
-			JOptionPane.showConfirmDialog(null, form, "Ny Förbindelse", JOptionPane.OK_CANCEL_OPTION);
-		
-			lg.connect(nng.get(sel1), nng.get(sel2), form.getNamn(), form.getTid());
-			
+					lg.connect(nng.get(sel1), nng.get(sel2), form.getNamn(), form.getTid());
 
-
-
+					return;
+				}catch (NumberFormatException e){	
+					JOptionPane.showMessageDialog(ResePlanerare.this, "Fel inmatning");
+				}
+			}
 		}
 	}
 	class AndraForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			Edge <Node> eng = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
 			if( eng == null){
 				JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
@@ -346,11 +351,18 @@ public class ResePlanerare extends JFrame {
 			Wname = eng.getWeight();
 			Ename = eng.getName();
 			AndraForbindelse anform = new AndraForbindelse();
+			while(true){
+				try{
+					int svar = JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
+					if(svar != JOptionPane.OK_OPTION)
+						return;
+					lg.setConnectionWeight(nng.get(sel1), nng.get(sel2),anform.getAnTid());
+					return;
 
-			JOptionPane.showConfirmDialog(null, anform, "Ändra Förbindelse", JOptionPane.OK_CANCEL_OPTION);
-			lg.setConnectionWeight(nng.get(sel1), nng.get(sel2),anform.getAnTid());
-
-
+				}catch (NumberFormatException e){
+					JOptionPane.showMessageDialog(ResePlanerare.this, "Mata in en siffra");
+				}
+			}
 
 		}
 	}
@@ -365,7 +377,7 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyKartaLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-			
+
 			if(!lg.isEmpty()){
 				lg.clear();	
 			}
@@ -380,7 +392,7 @@ public class ResePlanerare extends JFrame {
 				return;
 			try {
 				File f = fc.getSelectedFile();
-		
+
 				if (picture != null)
 					remove(picture);
 				img = ImageIO.read(f);
@@ -412,7 +424,7 @@ public class ResePlanerare extends JFrame {
 			validate();
 			repaint();
 			picture.removeMouseListener(m);
-			
+
 
 		}
 	}
@@ -431,7 +443,7 @@ public class ResePlanerare extends JFrame {
 			temp.setSelectedPinned(true);
 
 			repaint();
-			
+
 		}
 	}
 
