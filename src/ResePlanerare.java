@@ -258,10 +258,14 @@ public class ResePlanerare extends JFrame {
 
 		public HittaVag(){
 			setLayout(new FlowLayout());
-			hittaVag = new JTextArea(1,10);
+			hittaVag = new JTextArea(7,20);
+			int totalVikt = 0;
+			hittaVag.append("Från: " + nng.get(sel1) + "  till " + nng.get(sel2) + "\n");
 			for (Edge <Node> e : eLList){
-				hittaVag.append(e.toString());
+				hittaVag.append(e.toString()+ "\n");
+				totalVikt += e.getWeight();	
 			}
+			hittaVag.append(" Den totala tiden är:" + totalVikt);
 			hittaVag.setEditable(false);
 			add(new JScrollPane(hittaVag));	
 			
@@ -273,8 +277,11 @@ public class ResePlanerare extends JFrame {
 	class HittaLyss implements ActionListener{ 
 		public void actionPerformed(ActionEvent ave){
 		
-			if(!lg.pathExists(nng.get(sel1), nng.get(sel2)))
+			if(!lg.pathExists(nng.get(sel1), nng.get(sel2))){
 				JOptionPane.showMessageDialog(ResePlanerare.this, "Det finns ingen förbindelse mellan dessa platser", "FelMeddelande", JOptionPane.ERROR_MESSAGE);
+				
+			return;
+		}
 			eLList = lg.fastPath(nng.get(sel1), nng.get(sel2));
 			
 			HittaVag hiform = new HittaVag();

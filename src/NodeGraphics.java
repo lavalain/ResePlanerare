@@ -15,10 +15,10 @@ public class NodeGraphics extends JComponent {
 
 	public NodeGraphics(int x, int y, String name) {
 		this.name = name;
-		setBounds(x, y, 65, 65);
-		setPreferredSize(new Dimension(65, 65));
-		setMaximumSize(new Dimension(65, 65));
-		setMinimumSize(new Dimension(65, 65));
+		setBounds(x, y, 95, 55);
+		setPreferredSize(new Dimension(95, 55));
+		setMaximumSize(new Dimension(95, 55));
+		setMinimumSize(new Dimension(95, 55));
 		System.out.println("Skapar ny nod");
 	}
 
@@ -31,8 +31,8 @@ public class NodeGraphics extends JComponent {
 		
 		g.fillOval(0, 0, 20, 20);
 		g.setColor(Color.BLACK);
-		g.setFont(new Font("TimesNewRoman",Font.BOLD,15));
-		g.drawString(name, 2,50);	
+		g.setFont(new Font("TimesNewRoman",Font.BOLD,12));
+		g.drawString(name, 2,40);	
 	}
 
 	public void setSelectedPinned(boolean vald) {

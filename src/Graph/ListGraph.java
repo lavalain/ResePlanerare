@@ -116,16 +116,11 @@ public class ListGraph <T> {
 		tid.put(from, 0);
 		snabbast.put(from, true);
 		T aktuell = from;
-
-
 		while(snabbast.get(to) != true){
-
 			minNode = null;
 			for (T temp : s){
-
 				if(minNode == null && !snabbast.get(temp)){
-					minNode = temp;
-					
+					minNode = temp;	
 				}
 				for(Edge <T> e : getEdgesFrom(aktuell)){
 					if(!snabbast.get(e.getDestination())){
@@ -133,28 +128,17 @@ public class ListGraph <T> {
 					}
 				}
 				if((minNode != null) && tid.get(temp) < (tid.get(minNode)) && !snabbast.get(temp)){
-					System.out.println("Detta är temp: " + temp + "Detta är minNode: "+ minNode);
 					minNode = temp;
-
-					System.out.println( "Temp " + temp +"efter den jobbiga ifsatsen kommer min nod: " + minNode);
-
 				}
 			}
-
-			System.out.println("Den nya minNode är = " + minNode);
 			snabbast.put(minNode, true);
 			viadest.put(minNode, aktuell);
 			aktuell = minNode; 
-
-			//sätt i slutet av loopen
 
 			for (Edge <T> e : getEdgesFrom(aktuell)){
 				if(!snabbast.get(e.getDestination())){	
 					tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
 					
-
-
-
 					System.out.println("Aktuella noden: " + aktuell + " " + e.getDestination()+ "  " + tid.get(e.getDestination()));
 				}
 			}

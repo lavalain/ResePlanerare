@@ -28,6 +28,6 @@ public class Edge <T>{
 		this.weight = weight;
 	}
 	public String toString(){
-		return "Från   till " + destination + " "+ " med " + name + ": " + weight;
+		return " " + destination + " "+ " med " + name + ": " + weight;
 	}
 }
