@@ -319,6 +319,11 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			
+			if(picture == null){
+				JOptionPane.showMessageDialog(ResePlanerare.this, "ingen karta är vald");
+				return;
+			}
 
 			if(sel1 == null || sel2 == null){
 				JOptionPane.showMessageDialog(null, "Markera två noder");
@@ -342,7 +347,13 @@ public class ResePlanerare extends JFrame {
 	}
 	class AndraForbLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
-
+			
+			if(picture == null){
+				JOptionPane.showMessageDialog(ResePlanerare.this,"Du måste skapa en ny karta först");
+				
+				return;
+			}
+		
 			Edge <Node> eng = lg.getEdgeBetween(nng.get(sel1), nng.get(sel2));
 			if( eng == null){
 				JOptionPane.showMessageDialog(null, "Det finns ingen förbindelse mellan dessa noder");
@@ -363,7 +374,7 @@ public class ResePlanerare extends JFrame {
 					JOptionPane.showMessageDialog(ResePlanerare.this, "Mata in en siffra");
 				}
 			}
-
+			
 		}
 	}
 	//knappar slut
@@ -410,8 +421,11 @@ public class ResePlanerare extends JFrame {
 			nypform = new NyPlatsForm();
 
 			str = nypform.getNyPlats();
-			JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
-
+			int svar = JOptionPane.showConfirmDialog(null, nypform, "Ny Plats", JOptionPane.OK_CANCEL_OPTION);
+			if(svar != JOptionPane.OK_OPTION){
+				picture.removeMouseListener(m);
+				return;
+			}
 			n = new Node(nypform.getNyPlats());
 			lg.add(n);
 			ng = new NodeGraphics(mev.getX(),mev.getY(),nypform.getNyPlats());
