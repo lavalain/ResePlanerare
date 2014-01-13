@@ -19,7 +19,6 @@ public class NodeGraphics extends JComponent {
 		setPreferredSize(new Dimension(95, 55));
 		setMaximumSize(new Dimension(95, 55));
 		setMinimumSize(new Dimension(95, 55));
-		System.out.println("Skapar ny nod");
 	}
 
 	protected void paintComponent(Graphics g) {

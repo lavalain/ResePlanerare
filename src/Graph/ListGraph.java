@@ -42,7 +42,7 @@ public class ListGraph <T> {
 			if(!visited.contains(e.getDestination()))
 				depthFirstSearch(e.getDestination(), visited);
 	}
-	public Set<T> getNodes(){//????
+	public Set<T> getNodes(){
 		return new HashSet<T>(network.keySet());
 	}
 	public Edge <T> getEdgeBetween (T from, T to) {
@@ -100,64 +100,64 @@ public class ListGraph <T> {
 		network.clear();
 	}
 
-	public LinkedList<Edge <T>> bestWay(T from, T to){// används inte men blev fel när jag raderade.
-		Map<T, Integer> tid = new HashMap<T, Integer>();
-		Map<T, Boolean> snabbast = new HashMap <T, Boolean>();
-		Map<T, T> viadest = new HashMap <T, T>();
-		LinkedList<Edge <T>> path = new LinkedList<Edge <T>>();
-		Set<T> s = getNodes();
+	//public LinkedList<Edge <T>> bestWay(T from, T to){// används inte men blev fel när jag raderade.
+		//Map<T, Integer> tid = new HashMap<T, Integer>();
+		//Map<T, Boolean> snabbast = new HashMap <T, Boolean>();
+		//Map<T, T> viadest = new HashMap <T, T>();
+		//LinkedList<Edge <T>> path = new LinkedList<Edge <T>>();
+		//Set<T> s = getNodes();
 		
-		for (T temp : s ){
-			tid.put(temp, Integer.MAX_VALUE);
-			snabbast.put(temp, false);
-			viadest.put(temp, null);
-		}
-		viadest.put(from, from);
-		tid.put(from, 0);
-		snabbast.put(from, true);
-		T aktuell = from;
-		while(snabbast.get(to) != true){
-			minNode = null;
-			for (T temp : s){
-				if(minNode == null && !snabbast.get(temp)){
-					minNode = temp;	
-				}
-				for(Edge <T> e : getEdgesFrom(aktuell)){
-					if(!snabbast.get(e.getDestination())){
-						tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
-					}
-				}
-				if((minNode != null) && tid.get(temp) < (tid.get(minNode)) && !snabbast.get(temp)){
-					minNode = temp;
-				}
-			}
-			snabbast.put(minNode, true);
-			viadest.put(minNode, aktuell);
-			aktuell = minNode; 
+		//for (T temp : s ){
+			//tid.put(temp, Integer.MAX_VALUE);
+			//snabbast.put(temp, false);
+			//viadest.put(temp, null);
+		//}
+		//viadest.put(from, from);
+		//tid.put(from, 0);
+		//snabbast.put(from, true);
+		//T aktuell = from;
+		//while(snabbast.get(to) != true){
+			//minNode = null;
+			//for (T temp : s){
+				//if(minNode == null && !snabbast.get(temp)){
+					//minNode = temp;	
+				//}
+				//for(Edge <T> e : getEdgesFrom(aktuell)){
+					//if(!snabbast.get(e.getDestination())){
+						//tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
+					//}
+				//}
+				//if((minNode != null) && tid.get(temp) < (tid.get(minNode)) && !snabbast.get(temp)){
+					//minNode = temp;
+				//}
+			//}
+			//snabbast.put(minNode, true);
+			//viadest.put(minNode, aktuell);
+			//aktuell = minNode; 
 
-			for (Edge <T> e : getEdgesFrom(aktuell)){
-				if(!snabbast.get(e.getDestination())){	
-					tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
+			//for (Edge <T> e : getEdgesFrom(aktuell)){
+				//if(!snabbast.get(e.getDestination())){	
+					//tid.put(e.getDestination(), e.getWeight() + tid.get(aktuell));
 					
-					System.out.println("Aktuella noden: " + aktuell + " " + e.getDestination()+ "  " + tid.get(e.getDestination()));
-				}
-			}
+					//System.out.println("Aktuella noden: " + aktuell + " " + e.getDestination()+ "  " + tid.get(e.getDestination()));
+				//}
+			//}
 
-		}
-		for ( T n : s){//utskriftsloop
-			System.out.println(n + "\t\t\t" + tid.get(n) + "\t" + snabbast.get(n) + "\t" + viadest.get(n));
-		}
-		aktuell = to;
-		T nästa;
-		while(aktuell != viadest.get(aktuell)){
-			nästa = viadest.get(aktuell);
-			System.out.println(" nästa " + nästa + " Aktuell " + aktuell);
-			Edge <T> e = getEdgeBetween(nästa, aktuell);
-			path.addFirst(e);
-			aktuell = nästa;
-		}
-		return path ;
-	}
+		//}
+		//for ( T n : s){//utskriftsloop
+			//System.out.println(n + "\t\t\t" + tid.get(n) + "\t" + snabbast.get(n) + "\t" + viadest.get(n));
+		//}
+		//aktuell = to;
+		//T nästa;
+		//while(aktuell != viadest.get(aktuell)){
+			//nästa = viadest.get(aktuell);
+			//System.out.println(" nästa " + nästa + " Aktuell " + aktuell);
+			//Edge <T> e = getEdgeBetween(nästa, aktuell);
+			//path.addFirst(e);
+			//aktuell = nästa;
+		//}
+		//return path ;
+	//}
 	public LinkedList<Edge <T>> fastPath(T from, T to){
 	
 		if(!pathExists(from, to)){
