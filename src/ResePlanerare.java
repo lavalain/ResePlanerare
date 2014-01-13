@@ -276,6 +276,11 @@ public class ResePlanerare extends JFrame {
 	//Lyssnarmetoder
 	class HittaLyss implements ActionListener{ 
 		public void actionPerformed(ActionEvent ave){
+			
+			if(picture == null){
+				JOptionPane.showMessageDialog(ResePlanerare.this, " Ingen karta är vald");
+				return;
+			}
 
 			if(!lg.pathExists(nng.get(sel1), nng.get(sel2))){
 				JOptionPane.showMessageDialog(ResePlanerare.this, "Det finns ingen förbindelse mellan dessa platser", "FelMeddelande", JOptionPane.ERROR_MESSAGE);
@@ -292,6 +297,10 @@ public class ResePlanerare extends JFrame {
 	class VisaForLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
 
+			if(picture == null){
+				JOptionPane.showMessageDialog(ResePlanerare.this, "Ingen karta är vald");
+				return;
+			}
 			if(sel1 == null || sel2 == null)
 				JOptionPane.showMessageDialog(null, "Markera två noder");
 
@@ -310,6 +319,11 @@ public class ResePlanerare extends JFrame {
 	}
 	class NyPlatsLyss implements ActionListener{
 		public void actionPerformed(ActionEvent ave){
+			
+			if(picture == null){
+				JOptionPane.showMessageDialog(ResePlanerare.this, "Ingen karta är vald");
+				return;
+			}
 			Cursor c = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 			picture.setCursor(c);
 			m = new MouseList();
@@ -350,7 +364,6 @@ public class ResePlanerare extends JFrame {
 			
 			if(picture == null){
 				JOptionPane.showMessageDialog(ResePlanerare.this,"Du måste skapa en ny karta först");
-				
 				return;
 			}
 		
